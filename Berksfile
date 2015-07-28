@@ -12,11 +12,17 @@ cookbook 'ntp'
 cookbook 'sudo'
 cookbook 'timezone-ii'
 
-cookbook 'apache2', git: 'https://github.com/svanzoest-cookbooks/apache2.git', ref: '4ac713294d21c7f9f800bf9b64859ecba29f1552'
-cookbook 'php', git: 'https://github.com/maxwellshim/chef-php.git'
+cookbook 'apache2', '~> 3.1.0'
+cookbook 'php', git: 'https://github.com/joelhandwell/chef-php.git'
 cookbook 'php-fpm', git: 'https://github.com/yevgenko/cookbook-php-fpm.git'
 cookbook 'xdebug', git: 'https://github.com/joelhandwell/xdebug.git'
-cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: '9985cc1b7915ce07a2e8d3d240635d6c86d1e6d1'
+cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: '0a8cef411aaa79420576f62a25f1e53a2e1b6e06'
 
 cookbook 'nfs'
 cookbook 'cron'
+
+group :wrapper do
+  cookbook 'w_apache', path: './'
+  cookbook 'w_nfs', git: 'https://github.com/haapp/w_nfs.git'
+end
+
