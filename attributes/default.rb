@@ -28,6 +28,8 @@ default['w_apache']['deploy']['enabled'] = false
 
 default['w_apache']['phpmyadmin']['enabled'] = false
 
+default['phpmyadmin']['home'] = '/websites/phpmyadmin'
+default['phpmyadmin']['home_alias'] = '/phpmyadmin' 
 default['phpmyadmin']['version'] = '4.4.2'
 default['phpmyadmin']['checksum'] = 'e71684eebb451c70a9012452b53e60a9cd8e4679c630120b0e3a6e8607d6d37d'
 default['phpmyadmin']['config_template_cookbook'] = 'w_apache'

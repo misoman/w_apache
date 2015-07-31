@@ -4,13 +4,12 @@ end
 
 include_recipe 'phpmyadmin'
 
-if node.chef_environment == 'development' then
+apache_conf 'phpmyadmin' do
+  cookbook 'w_apache'
+end
 
-  Chef::Log.info('Enviroment is Detected as development, phpmyadmin will be installed for anydomain.com/mygoodadmin without apache authentication')
+phpmyadmin = data_bag_item('w_apache','phpmyadmin')
 
-  # this resource will create config file from template w_apache/templates/default/phpmyadmin.conf.php.erb
-  apache_conf 'phpmyadmin' do
-    cookbook 'w_apache'
-  end
-
+execute 'htpasswd_create' do
+  command "htpasswd -cbm #{node['phpmyadmin']['home']}/.htpasswd #{phpmyadmin['user']} #{phpmyadmin['passwd']}"
 end
