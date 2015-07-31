@@ -46,9 +46,9 @@ node['apache']['listen_ports'].each do |listen_port|
 	end
 end
 
+include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
 include_recipe 'w_apache::config_test' if node['w_apache']['config_test_enabled']
 include_recipe 'w_apache::monit' if node['monit_enabled']
 include_recipe 'w_apache::varnish_integration' if node['w_apache']['varnish_enabled']
 include_recipe 'w_apache::deploy' if node['w_apache']['deploy']['enabled']
 include_recipe 'w_apache::phpmyadmin' if node['w_apache']['phpmyadmin']['enabled']
-include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
