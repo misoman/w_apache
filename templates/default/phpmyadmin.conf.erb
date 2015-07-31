@@ -1,7 +1,12 @@
-Alias /mygoodadmin/ "/opt/phpmyadmin/"
-<Directory "/opt/phpmyadmin/">
+Alias <%= node['phpmyadmin']['home_alias'] %> <%= node['phpmyadmin']['home'] %>
+<Directory <%= node['phpmyadmin']['home'] %>>
 Order allow,deny
 Allow from all
 # New directive needed in Apache 2.4.3:
-Require all granted
+Require valid-user
+ <IfModule mod_authn_file.c>
+ AuthType Basic
+ AuthName "phpMyAdmin login"
+ AuthUserFile <%= node['phpmyadmin']['home']%>/.htpasswd
+ </IfModule>
 </Directory>
