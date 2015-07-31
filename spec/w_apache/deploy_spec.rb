@@ -29,6 +29,10 @@ describe 'w_apache::deploy' do
 	    expect(chef_run).to include_recipe('git')
 	  end
 
+	  it 'runs an execute to change shell for www-data' do
+	    expect(chef_run).to run_execute('chsh -s /bin/sh www-data')
+	  end
+
 	  it 'generates /etc/hosts file entry to enable communication btw web and gitlap server' do
 	  	expect(chef_run).to append_hostsfile_entry('9.9.9.9').with_hostname('git.examplewebsite.com').with_unique(true)
 	  end

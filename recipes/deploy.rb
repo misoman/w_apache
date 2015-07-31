@@ -1,5 +1,7 @@
 include_recipe 'git'
 
+execute 'chsh -s /bin/sh www-data'
+
 directory "/var/www/.ssh" do
   owner 'www-data'
   group 'www-data'
