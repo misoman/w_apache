@@ -1,6 +1,7 @@
-directory '/websites' do
-    owner 'www-data'
-    group 'www-data'
+directory '/websites' do 
+  owner 'www-data'
+  group 'www-data'
+  not_if 'ls /websites'
 end
 
 node['w_common']['web_apps'].each do |web_app|

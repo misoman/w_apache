@@ -19,6 +19,7 @@ describe 'w_apache::vhosts' do
 
 	  before do
 	    stub_command("/usr/sbin/apache2 -t").and_return(true)
+	    stub_command("ls /websites").and_return(false)
 	  end
 
 	  it 'creates directory /websites' do

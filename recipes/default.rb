@@ -29,6 +29,8 @@ apt_repository "apache2" do
   distribution node["lsb"]["codename"]
 end
 
+include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
+
 include_recipe 'apache2'
 package 'apache2-mpm-worker'
 include_recipe 'w_apache::php'
@@ -46,7 +48,6 @@ node['apache']['listen_ports'].each do |listen_port|
 	end
 end
 
-include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
 include_recipe 'w_apache::config_test' if node['w_apache']['config_test_enabled']
 include_recipe 'w_apache::monit' if node['monit_enabled']
 include_recipe 'w_apache::varnish_integration' if node['w_apache']['varnish_enabled']
