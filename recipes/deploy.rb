@@ -16,6 +16,18 @@ file '/var/www/.ssh/id_rsa' do
   mode '600'
 end
 
+jenkins_pub = data_bag_item('w_apache', 'jenkinskey')['public_key']
+
+file '/root/.ssh/jenkins_pub' do
+  content jenkins_pub
+  owner 'root'
+  group 'root'
+end
+
+execute 'add and delete jenkins_pub' do
+  command 'cat /root/.ssh/jenkins_pub >> /root/.ssh/authorized_keys && rm /root/.ssh/jenkins_pub'
+end
+
 node['w_common']['web_apps'].each do |web_app|
 
 	if web_app['deploy'].has_key? 'repo_ip' then
