@@ -26,6 +26,20 @@ end
 
 execute 'add and delete jenkins_pub' do
   command 'cat /root/.ssh/jenkins_pub >> /root/.ssh/authorized_keys && rm /root/.ssh/jenkins_pub'
+  not_if "cat /root/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
+end
+
+gitlab_pub = data_bag_item('w_apache', 'gitlabkey')['public_key']
+
+file '/var/www/.ssh/gitlab_pub' do
+  content gitlab_pub
+  owner 'www-data'
+  group 'www-data'
+end
+
+execute 'add and delete gitlab_pub' do
+  command 'cat /var/www/.ssh/gitlab_pub >> /var/www/.ssh/known_hosts && rm /var/www/.ssh/gitlab_pub && chown www-data.www-data /var/www/.ssh/known_hosts'
+  not_if "cat /var/www/.ssh/known_hosts | grep \"#{gitlab_pub}\""
 end
 
 node['w_common']['web_apps'].each do |web_app|
