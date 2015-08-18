@@ -32,7 +32,6 @@ end
 include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
 
 include_recipe 'apache2'
-package 'apache2-mpm-worker'
 include_recipe 'w_apache::php'
 include_recipe 'w_apache::vhosts'
 

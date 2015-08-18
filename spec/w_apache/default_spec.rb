@@ -78,10 +78,6 @@ describe 'w_apache::default' do
       expect(chef_run).to include_recipe('apache2')
     end
   
-  	it 'installs apache2-mpm-worker package with the default action' do
-      expect(chef_run).to install_package('apache2-mpm-worker')
-    end
-  
     it 'runs recipe w_apache::php, and w_apache::vhosts' do
       expect(chef_run).to include_recipe('w_apache::php')
       expect(chef_run).to include_recipe('w_apache::vhosts')
