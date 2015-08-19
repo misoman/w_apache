@@ -19,16 +19,6 @@ apt_repository 'security-multiverse-src' do
   deb_src true
 end
 
-apt_repository "php55" do
-  uri 'ppa:ondrej/php5'
-  distribution node["lsb"]["codename"]
-end
-
-apt_repository "apache2" do
-  uri 'ppa:ondrej/apache2'
-  distribution node["lsb"]["codename"]
-end
-
 include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
 
 include_recipe 'apache2'

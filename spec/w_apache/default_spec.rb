@@ -70,8 +70,6 @@ describe 'w_apache::default' do
   		expect(chef_run).to add_apt_repository('multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise', deb_src: true)
   		expect(chef_run).to add_apt_repository('updates-multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise-updates', deb_src: true)
   		expect(chef_run).to add_apt_repository('security-multiverse-src').with(uri: 'http://security.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise-security', deb_src: true)
-  		expect(chef_run).to add_apt_repository('php55').with(uri: 'ppa:ondrej/php5', distribution: 'precise')
-  		expect(chef_run).to add_apt_repository('apache2').with(uri: 'ppa:ondrej/apache2', distribution: 'precise')
   	end
   
     it 'runs recipe apache2' do
@@ -100,7 +98,7 @@ describe 'w_apache::default' do
   #	end
     end
     
-  context 'with Ubintu 14.04 precise' do
+  context 'with Ubintu 14.04 trusty' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_memcached']['ips'] = ['127.0.0.1']
@@ -139,8 +137,6 @@ describe 'w_apache::default' do
   		expect(chef_run).to add_apt_repository('multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty', deb_src: true)
   		expect(chef_run).to add_apt_repository('updates-multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-updates', deb_src: true)
   		expect(chef_run).to add_apt_repository('security-multiverse-src').with(uri: 'http://security.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-security', deb_src: true)
-  		expect(chef_run).to add_apt_repository('php55').with(uri: 'ppa:ondrej/php5', distribution: 'trusty')
-  		expect(chef_run).to add_apt_repository('apache2').with(uri: 'ppa:ondrej/apache2', distribution: 'trusty')
   	end
     
   end
