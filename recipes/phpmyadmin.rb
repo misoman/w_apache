@@ -8,6 +8,8 @@ apache_conf 'phpmyadmin' do
   cookbook 'w_apache'
 end
 
+package 'apache2-utils' #if platform_family?('debian', 'suse') && node['apache']['version'] == '2.4'
+
 phpmyadmin = data_bag_item('w_apache','phpmyadmin')
 
 execute 'htpasswd_create' do
