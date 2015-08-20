@@ -56,6 +56,10 @@ describe 'w_apache::phpmyadmin' do
       conf_template = chef_run.template('/etc/apache2/conf-available/phpmyadmin.conf')
       expect(conf_template).to notify('service[apache2]').to(:reload).delayed
     end
+    
+    it 'installs apache2-utils' do
+      expect(chef_run).to install_package('apache2-utils')
+    end
 
     it 'execute htpasswd_create' do
       expect(chef_run).to run_execute('htpasswd -cbm /websites/phpmyadmin/.htpasswd user passwd')
