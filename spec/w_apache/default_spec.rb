@@ -13,6 +13,7 @@ describe 'w_apache::default' do
     stub_command("/usr/sbin/apache2 -t").and_return(true)
     stub_data_bag_item("w_apache", "phpmyadmin").and_return('id' => 'phpmyadmin', 'user' => 'user', 'passwd' => 'passwd')
     stub_command("ls /websites").and_return(false)
+    stub_command("grep phpmyadmin /etc/passwd").and_return(false)
     stub_data_bag_item("w_apache", "jenkinskey").and_return('id' => 'jenkinskey', 'public_key' => 'ssh-rsa BAAAB3NzaC1yc2EAAAADAQABAAABAQDFrcjKWXebaCrE49CikRd1ScSuRdbMuJ6aMxBgg9RuA9c2Lzn70YFguoSXl0xwdhxIG4O+ft6lL4TwJy80J+Hs1cUE/GxemLDYSVwfG61+AqDonYnMRvdeYsWxfTi5lINA60IIUkvv5fNS69FLRoJT8sZdUDX9rF/swuEohcVT3GVUyKfGZtEJcASYwSiHXiyJ3tgfFNTeRZKw/qMWX+bSCUbFAJrTyHzg0FobEVWyUdlUvNXnNI8vlhh6qbnx4cPmRWqsqsEPWe3CjDArzgMs3m5ez0+7S3SrBf3mNqbzH0E/RhsrQqOuHHPVOz/aVlcKEOaSqiBTXwPn9xZjS4lF jenkins@jenkins.examplewebsite.com')
 	  stub_data_bag_item("w_apache", "gitlabkey").and_return('id' => 'gitlabkey', 'public_key' => 'git.examplewebsite.com ssh-rsa VAAAB3NzaC1yc2EAAAADAQABAAABAQDN5u2/w1xQdJQWD+/omBz4iR8ZUvPiRRgk6O6MYy+vmrPr4w+GyMYfhvDylhW+BIil2mHDaY7XdMrJb1FlUoS4a0WxMbpvqffMlVQoYphtHbtqALCfD6s+KKIcE0nuwYU7gaMRHU9LFxdsjVv2wRGrW79b8u22ySLRdkKu9tSSfkeAWUP7CMiMELVEr1su5mTeR7j1oQUnoRA6w5fsFRtu5PHMS8i/-jdTwoG4JYWKbmVxqhzso+qT2rix4duJJ8LEN35wCkCO/nbTlXExEZovvjE7hNPmA5EULLN/jWy2Vuq0blqDKs6eN6+lzMME2iplNIKZdfvXO+e90zdHnJOK')
 	  stub_command("cat /root/.ssh/authorized_keys | grep \"ssh-rsa BAAAB3NzaC1yc2EAAAADAQABAAABAQDFrcjKWXebaCrE49CikRd1ScSuRdbMuJ6aMxBgg9RuA9c2Lzn70YFguoSXl0xwdhxIG4O+ft6lL4TwJy80J+Hs1cUE/GxemLDYSVwfG61+AqDonYnMRvdeYsWxfTi5lINA60IIUkvv5fNS69FLRoJT8sZdUDX9rF/swuEohcVT3GVUyKfGZtEJcASYwSiHXiyJ3tgfFNTeRZKw/qMWX+bSCUbFAJrTyHzg0FobEVWyUdlUvNXnNI8vlhh6qbnx4cPmRWqsqsEPWe3CjDArzgMs3m5ez0+7S3SrBf3mNqbzH0E/RhsrQqOuHHPVOz/aVlcKEOaSqiBTXwPn9xZjS4lF jenkins@jenkins.examplewebsite.com\"").and_return(false)
@@ -27,6 +28,8 @@ describe 'w_apache::default' do
       	node.automatic["lsb"]["codename"] = 'precise'
         node.automatic['memory']['total'] = '4049656kB'
         node.automatic['memory']['swap']['total'] = '1024kB'
+        node.automatic['platform'] = 'ubuntu'
+        node.automatic['platform_version'] = '12.04'
       	varnish = {
            "purge_target" => true
             }
@@ -70,6 +73,8 @@ describe 'w_apache::default' do
   		expect(chef_run).to add_apt_repository('multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise', deb_src: true)
   		expect(chef_run).to add_apt_repository('updates-multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise-updates', deb_src: true)
   		expect(chef_run).to add_apt_repository('security-multiverse-src').with(uri: 'http://security.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'precise-security', deb_src: true)
+  		expect(chef_run).to add_apt_repository('php55').with(uri: 'ppa:ondrej/php5', distribution: 'precise')
+  		expect(chef_run).to add_apt_repository('apache2').with(uri: 'ppa:ondrej/apache2', distribution: 'precise')
   	end
   
     it 'runs recipe apache2' do
@@ -103,6 +108,8 @@ describe 'w_apache::default' do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_memcached']['ips'] = ['127.0.0.1']
         node.automatic["lsb"]["codename"] = 'trusty'
+        node.automatic['platform'] = 'ubuntu'
+        node.automatic['platform_version'] = '14.04'
       	varnish = {
            "purge_target" => true
             }  
