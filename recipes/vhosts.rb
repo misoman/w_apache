@@ -12,6 +12,7 @@ node['w_common']['web_apps'].each do |web_app|
   directory dir do
     owner 'www-data'
     group 'www-data'
+    recursive true
   end
 
   web_app vhost['main_domain'] do
