@@ -27,11 +27,11 @@ describe 'w_apache::vhosts' do
 	  end
 
 	  it 'creates directory /websites/www when docroot is specified ' do
-	    expect(chef_run).to create_directory('/websites/www').with(owner: 'www-data', group: 'www-data')
+	    expect(chef_run).to create_directory('/websites/www').with(owner: 'www-data', group: 'www-data', recursive: true)
 	  end
 
 	  it 'creates directory /websites/example2.com when docroot is not specified' do
-	    expect(chef_run).to create_directory('/websites/example2.com').with(owner: 'www-data', group: 'www-data')
+	    expect(chef_run).to create_directory('/websites/example2.com').with(owner: 'www-data', group: 'www-data', recursive: true)
 	  end
 
     describe '/etc/apache2/sites-available/example.com.conf' do
