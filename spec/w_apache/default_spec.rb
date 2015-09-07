@@ -19,7 +19,7 @@ describe 'w_apache::default' do
 	  stub_command("cat /root/.ssh/authorized_keys | grep \"ssh-rsa BAAAB3NzaC1yc2EAAAADAQABAAABAQDFrcjKWXebaCrE49CikRd1ScSuRdbMuJ6aMxBgg9RuA9c2Lzn70YFguoSXl0xwdhxIG4O+ft6lL4TwJy80J+Hs1cUE/GxemLDYSVwfG61+AqDonYnMRvdeYsWxfTi5lINA60IIUkvv5fNS69FLRoJT8sZdUDX9rF/swuEohcVT3GVUyKfGZtEJcASYwSiHXiyJ3tgfFNTeRZKw/qMWX+bSCUbFAJrTyHzg0FobEVWyUdlUvNXnNI8vlhh6qbnx4cPmRWqsqsEPWe3CjDArzgMs3m5ez0+7S3SrBf3mNqbzH0E/RhsrQqOuHHPVOz/aVlcKEOaSqiBTXwPn9xZjS4lF jenkins@jenkins.examplewebsite.com\"").and_return(false)
 	  stub_command("cat /var/www/.ssh/known_hosts | grep \"git.examplewebsite.com ssh-rsa VAAAB3NzaC1yc2EAAAADAQABAAABAQDN5u2/w1xQdJQWD+/omBz4iR8ZUvPiRRgk6O6MYy+vmrPr4w+GyMYfhvDylhW+BIil2mHDaY7XdMrJb1FlUoS4a0WxMbpvqffMlVQoYphtHbtqALCfD6s+KKIcE0nuwYU7gaMRHU9LFxdsjVv2wRGrW79b8u22ySLRdkKu9tSSfkeAWUP7CMiMELVEr1su5mTeR7j1oQUnoRA6w5fsFRtu5PHMS8i/-jdTwoG4JYWKbmVxqhzso+qT2rix4duJJ8LEN35wCkCO/nbTlXExEZovvjE7hNPmA5EULLN/jWy2Vuq0blqDKs6eN6+lzMME2iplNIKZdfvXO+e90zdHnJOK\"").and_return(false)
   end
-  
+
   context 'with Ubintu 12.04 precise' do
 
     let(:chef_run) do
@@ -33,7 +33,7 @@ describe 'w_apache::default' do
       	varnish = {
            "purge_target" => true
             }
-  
+
   			node.set['w_common']['web_apps'] = [
           {"vhost" => {
                   "main_domain" => "example.com",
@@ -76,33 +76,33 @@ describe 'w_apache::default' do
   		expect(chef_run).to add_apt_repository('php55').with(uri: 'ppa:ondrej/php5', distribution: 'precise')
   		expect(chef_run).to add_apt_repository('apache2').with(uri: 'ppa:ondrej/apache2', distribution: 'precise')
   	end
-  
+
     it 'runs recipe apache2' do
       expect(chef_run).to include_recipe('apache2')
     end
-  
+
     it 'runs recipe w_apache::php, and w_apache::vhosts' do
       expect(chef_run).to include_recipe('w_apache::php')
       expect(chef_run).to include_recipe('w_apache::vhosts')
     end
-  
+
     it 'enables firewall' do
-    	expect(chef_run).to enable_firewall('ufw')
+    	expect(chef_run).to install_firewall('default')
     end
-  
+
     [80].each do |listen_port|
     	it "runs resoruce firewall_rule to open port #{listen_port}" do
-      	expect(chef_run).to allow_firewall_rule('http').with(port: listen_port, protocol: :tcp)
+      	expect(chef_run).to create_firewall_rule('http').with(port: listen_port, protocol: :tcp)
       end
     end
-  
+
   #	%w( config_test monit varnish_integration deploy phpmyadmin).each do |recipe|
   #		it "runs recipe w_apache::#{recipe}" do
   #			expect(chef_run).to include_recipe("w_apache::#{recipe}")
   #		end
   #	end
     end
-    
+
   context 'with Ubintu 14.04 trusty' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
@@ -112,7 +112,7 @@ describe 'w_apache::default' do
         node.automatic['platform_version'] = '14.04'
       	varnish = {
            "purge_target" => true
-            }  
+            }
   			node.set['w_common']['web_apps'] = [
           {"vhost" => {
                   "main_domain" => "example.com",
@@ -136,16 +136,16 @@ describe 'w_apache::default' do
            "varnish" => varnish
           }
   			]
-        node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"] 
+        node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
       end.converge(described_recipe)
     end
-    
+
   	it 'adds apt repository multiverse, updates-multiverse, security-multiverse-src, php55 and apache2' do
   		expect(chef_run).to add_apt_repository('multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty', deb_src: true)
   		expect(chef_run).to add_apt_repository('updates-multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-updates', deb_src: true)
   		expect(chef_run).to add_apt_repository('security-multiverse-src').with(uri: 'http://security.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-security', deb_src: true)
   	end
-    
+
   end
 
 end

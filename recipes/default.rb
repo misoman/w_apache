@@ -25,7 +25,7 @@ if node['platform'] == 'ubuntu' && node['platform_version'] == '12.04' then
     uri 'ppa:ondrej/php5'
     distribution node["lsb"]["codename"]
   end
-  
+
   apt_repository "apache2" do
     uri 'ppa:ondrej/apache2'
     distribution node["lsb"]["codename"]
@@ -39,15 +39,12 @@ include_recipe 'apache2'
 include_recipe 'w_apache::php'
 include_recipe 'w_apache::vhosts'
 
-firewall 'ufw' do
-  action :enable
-end
+firewall 'default'
 
 node['apache']['listen_ports'].each do |listen_port|
 	firewall_rule 'http' do
 	  port     listen_port.to_i
 	  protocol :tcp
-	  action   :allow
 	end
 end
 
