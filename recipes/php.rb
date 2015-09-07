@@ -35,13 +35,10 @@ if node['w_apache']['xdebug_enabled'] then
 
   include_recipe 'xdebug'
 
-	firewall 'ufw' do
-	  action :enable
-	end
+	firewall 'default'
 
   firewall_rule 'xdebug' do
     port     9000
     protocol :tcp
-    action   :allow
   end
 end
