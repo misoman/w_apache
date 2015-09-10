@@ -13,6 +13,7 @@ ChefSpec::Coverage.start! do
   add_filter(%r{/git/})
   add_filter(%r{/apt-repo/})
   add_filter(%r{/nfs/})
+  add_filter(%r{/haproxy/})  
 end
 
 RSpec.configure do |config|
