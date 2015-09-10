@@ -20,6 +20,7 @@ cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', 
 
 cookbook 'nfs'
 cookbook 'cron'
+cookbook 'haproxy', git: 'https://github.com/hw-cookbooks/haproxy.git', ref: 'ca47a5cc32ba8794621f7649806f6c80687f9aec'
 
 group :wrapper do
   cookbook 'w_apache', path: './'

@@ -36,3 +36,8 @@ default['phpmyadmin']['config_template_cookbook'] = 'w_apache'
 default['phpmyadmin']['stand_alone'] = false
 
 default['w_apache']['nfs']['enabled'] = false
+
+default['w_apache']['haproxydb_enabled'] = false
+default['haproxy']['enable_default_http'] = false
+default['haproxy']['mode'] = 'tcp'
+default['haproxy']['incoming_port'] = 3306

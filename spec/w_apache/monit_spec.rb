@@ -38,8 +38,8 @@ describe 'w_apache::monit' do
     expect(chef_run).to add_monit_config('apache2')
   end
 
-#  it 'run resource monit_monitrc' do
-#    expect(chef_run).to add_monit_config('haproxy')
-#  end
+  it 'run resource monit_monitrc' do
+    expect(chef_run).to add_monit_config('haproxy')
+  end
   
 end
