@@ -41,3 +41,4 @@ default['w_apache']['haproxydb_enabled'] = false
 default['haproxy']['mode'] = 'tcp'
 default['haproxy']['incoming_port'] = 3306
 default['haproxy']['admin']['address_bind'] = '0.0.0.0'
+default['haproxy']['defaults_options'] = ["tcplog", "dontlognull", "redispatch"]
