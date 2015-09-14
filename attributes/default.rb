@@ -42,3 +42,5 @@ default['haproxy']['mode'] = 'tcp'
 default['haproxy']['incoming_port'] = 3306
 default['haproxy']['admin']['address_bind'] = '0.0.0.0'
 default['haproxy']['defaults_options'] = ["tcplog", "dontlognull", "redispatch"]
+default['haproxy']['httpchk'] = ''
+default['haproxy']['pool_members_option'] = 'port 9200 inter 1200 rise 3 fall 3'
