@@ -33,7 +33,7 @@ Ubuntu 14.04, Ubuntu 12.04
 
 Usage
 -----
-#### w_haproxy::default
+#### w_apache::default
 
 Include with `w_common` in your node/role's `run_list`:
 
