@@ -1,4 +1,4 @@
-w_common Cookbook
+w_apache Cookbook
 ==================
 
 [![Build Status](https://travis-ci.org/haapp/w_apache.svg?branch=master)](https://travis-ci.org/haapp/w_apache)
