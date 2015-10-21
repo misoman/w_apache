@@ -1,0 +1,3 @@
+[submodule "test/integration/test_w_apache"]
+	path = test/integration/test_w_apache
+	url = https://github.com/haapp/serverspec-w_apache.git
