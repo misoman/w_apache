@@ -108,14 +108,14 @@ describe 'w_apache::vhosts' do
       stub_command("ls /websites").and_return(false)
     end
 
-    it 'creates directory nfs data directory and symlink for example.com' do
-      expect(chef_run).to create_directory('/exports/data/websites/www/data').with(owner: 'www-data', group: 'www-data')
-      expect(chef_run).to create_link('/websites/www/data').with(to: '/exports/data/websites/www/data', owner: 'www-data', group: 'www-data')
-    end
-
-    it 'creates directory nfs data directory and symlink for example2.com' do
-      expect(chef_run).to create_directory('/exports/data/websites/example2.com/data').with(owner: 'www-data', group: 'www-data')
-      expect(chef_run).to create_link('/websites/example2.com/data').with(to: '/exports/data/websites/example2.com/data', owner: 'www-data', group: 'www-data')
-    end
+#    it 'creates directory nfs data directory and symlink for example.com' do
+#      expect(chef_run).to create_directory('/exports/data/websites/www/data').with(owner: 'www-data', group: 'www-data')
+#      expect(chef_run).to create_link('/websites/www/data').with(to: '/exports/data/websites/www/data', owner: 'www-data', group: 'www-data')
+#    end
+#
+#    it 'creates directory nfs data directory and symlink for example2.com' do
+#      expect(chef_run).to create_directory('/exports/data/websites/example2.com/data').with(owner: 'www-data', group: 'www-data')
+#      expect(chef_run).to create_link('/websites/example2.com/data').with(to: '/exports/data/websites/example2.com/data', owner: 'www-data', group: 'www-data')
+#    end
   end
 end
