@@ -1,15 +1,8 @@
-directory '/websites' do
-  owner 'www-data'
-  group 'www-data'
-  not_if 'ls /websites'
-end
-
 node['w_common']['web_apps'].each do |web_app|
 
   vhost = web_app['vhost']
-  dir = vhost['docroot'] ? vhost['docroot'] : vhost['main_domain']
-  document_root = '/websites/' + dir
-  directory document_root do
+
+  directory vhost['docroot'] do
     owner 'www-data'
     group 'www-data'
     recursive true
@@ -18,7 +11,7 @@ node['w_common']['web_apps'].each do |web_app|
   web_app vhost['main_domain'] do
     server_name vhost['main_domain']
     server_aliases vhost['aliases']
-    docroot document_root
+    docroot vhost['docroot']
     cookbook 'apache2'
     allow_override 'All'
     directory_index ["index.html", "index.htm", "index.php"]

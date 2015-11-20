@@ -61,10 +61,12 @@ node['w_common']['web_apps'].each do |web_app|
 		end
 	end
 
-  vhost = web_app['vhost']
-  dir = vhost['docroot'] ? vhost['docroot'] : vhost['main_domain']
-  dir = '/websites/' + dir
+  dir = web_app['deploy']['repo_path']
 	url = web_app['deploy']['repo_url']
+	
+	execute "make sure ownership of #{dir}" do
+	  command "chown -R www-data.www-data #{dir}"
+	end
 	
 	execute "git init for #{url}" do
 	  cwd dir

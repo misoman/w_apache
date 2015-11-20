@@ -5,7 +5,7 @@ describe 'w_apache::default' do
   before do
     stub_command("/usr/sbin/apache2 -t").and_return(true)
 	  stub_command("cat /websites/examplewebsite.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
-	  stub_command("cat /websites/www/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
+	  stub_command("cat /websites/example.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
 	  stub_command("cat /websites/examplewebsite.com/admin/.git/config | grep https://git.examplewebsite.com/admin.git").and_return(false)
     stub_command("lsof -u phpmyadmin | grep phpmyadmin").and_return(true)
     stub_data_bag('w_apache').and_return(['deploykey'])
@@ -38,11 +38,12 @@ describe 'w_apache::default' do
           {"vhost" => {
                   "main_domain" => "example.com",
                   "aliases" => ['www.example.com', 'ex.com'],
-                  "docroot" => "www"
+                  "docroot" => "/websites/example.com/www"
                   },
            "deploy" => {
                   "repo_ip" => "9.9.9.9",
                   "repo_domain" => "git.examplewebsite.com",
+                  "repo_path" => "/websites/example.com",
                   "repo_url" => "https://git.examplewebsite.com/www.git"
            },
            "connection_domain" => {
@@ -118,11 +119,12 @@ describe 'w_apache::default' do
           {"vhost" => {
                   "main_domain" => "example.com",
                   "aliases" => ['www.example.com', 'ex.com'],
-                  "docroot" => "www"
+                  "docroot" => "/websites/example.com/www"
                   },
            "deploy" => {
                   "repo_ip" => "9.9.9.9",
                   "repo_domain" => "git.examplewebsite.com",
+                  "repo_path" => "/websites/example.com",
                   "repo_url" => "https://git.examplewebsite.com/www.git"
            },
            "connection_domain" => {

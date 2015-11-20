@@ -5,8 +5,8 @@ describe 'w_apache::deploy' do
 
 		let(:web_apps) do
 		  [
-		  	{ vhost: { main_domain: 'examplewebsite.com', docroot: 'examplewebsite.com' }, deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_url: 'https://git.examplewebsite.com/www.git' } },
-		  	{ vhost: { main_domain: 'admin.examplewebsite.com', docroot: 'examplewebsite.com/admin' }, deploy: { repo_url: 'https://git.examplewebsite.com/admin.git' } }
+		  	{ vhost: { main_domain: 'examplewebsite.com', docroot: '/websites/examplewebsite.com/www' }, deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_path: '/websites/examplewebsite.com', repo_url: 'https://git.examplewebsite.com/www.git' } },
+		  	{ vhost: { main_domain: 'admin.examplewebsite.com', docroot: '/websites/examplewebsite.com/admin' }, deploy: { repo_path: '/websites/examplewebsite.com/admin', repo_url: 'https://git.examplewebsite.com/admin.git' } }
 		  ]
 	  end
 
@@ -52,7 +52,11 @@ describe 'w_apache::deploy' do
 	    expect(chef_run).to create_file('/var/www/.ssh/gitlab_pub').with(owner: 'www-data', group: 'www-data', content: 'git.examplewebsite.com ssh-rsa VAAAB3NzaC1yc2EAAAADAQABAAABAQDN5u2/w1xQdJQWD+/omBz4iR8ZUvPiRRgk6O6MYy+vmrPr4w+GyMYfhvDylhW+BIil2mHDaY7XdMrJb1FlUoS4a0WxMbpvqffMlVQoYphtHbtqALCfD6s+KKIcE0nuwYU7gaMRHU9LFxdsjVv2wRGrW79b8u22ySLRdkKu9tSSfkeAWUP7CMiMELVEr1su5mTeR7j1oQUnoRA6w5fsFRtu5PHMS8i/-jdTwoG4JYWKbmVxqhzso+qT2rix4duJJ8LEN35wCkCO/nbTlXExEZovvjE7hNPmA5EULLN/jWy2Vuq0blqDKs6eN6+lzMME2iplNIKZdfvXO+e90zdHnJOK')
 	    expect(chef_run).to run_execute('add and delete gitlab_pub')
 	  end
-    
+
+	  it 'make sure ownership of /websites/examplewebsite.com' do
+	    expect(chef_run).to run_execute('chown -R www-data.www-data /websites/examplewebsite.com')
+	  end
+	  	  	      
 	  it 'runs a execute git init for www' do
 	    expect(chef_run).to run_execute('git init for https://git.examplewebsite.com/www.git').with(cwd: '/websites/examplewebsite.com', command: 'git init', user: 'www-data', group: 'www-data', creates: '/websites/examplewebsite.com/.git/HEAD')
 	  end
@@ -65,12 +69,16 @@ describe 'w_apache::deploy' do
 	  	stub_command("cat /websites/examplewebsite.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(true)
 	    expect(chef_run).to_not run_execute('git remote add origin https://git.examplewebsite.com/www.git').with(cwd: '/websites/examplewebsite.com', user: 'www-data', group: 'www-data')
 	  end
-	  
+
+	  it 'make sure ownership of /websites/examplewebsite.com/admin' do
+	    expect(chef_run).to run_execute('chown -R www-data.www-data /websites/examplewebsite.com/admin')
+	  end
+	  	  
 	  it 'runs a execute git init for admin' do
 	    expect(chef_run).to run_execute('git init for https://git.examplewebsite.com/admin.git').with(cwd: '/websites/examplewebsite.com/admin', command: 'git init', user: 'www-data', group: 'www-data', creates: '/websites/examplewebsite.com/admin/.git/HEAD')
 	  end
 	  
-	  it 'runs a execute git remote add origin url for admin' do
+	  it 'runs a execute git remote add origin url for admin' do	    
 	    expect(chef_run).to run_execute('git remote add origin https://git.examplewebsite.com/admin.git').with(cwd: '/websites/examplewebsite.com/admin', user: 'www-data', group: 'www-data')
 	  end
 
