@@ -1,5 +1,4 @@
 node['w_common']['web_apps'].each do |web_app|
-  dir = web_app['vhost']['docroot'] ? web_app['vhost']['docroot'] : web_app['vhost']['main_domain']
   if web_app['mysql'].instance_of?(Chef::Node::ImmutableArray) then
     databases = web_app['mysql']
   else
@@ -7,7 +6,7 @@ node['w_common']['web_apps'].each do |web_app|
     databases << web_app['mysql']
   end
 
-  template  '/websites/' + dir + '/config_test.php' do
+  template  web_app['vhost']['docroot'] + '/config_test.php' do
     source 'config_test.php.erb'
     variables(
       :db_domain => web_app['connection_domain']['db_domain'],
@@ -15,11 +14,11 @@ node['w_common']['web_apps'].each do |web_app|
     )
   end
 
-  file '/websites/' + dir + '/info.php' do
+  file web_app['vhost']['docroot'] + '/info.php' do
     content '<?php phpinfo(); ?>'
   end
 
-  redirect_dir = '/websites/' + dir + '/redirect_test'
+  redirect_dir = web_app['vhost']['docroot'] + '/redirect_test'
   directory redirect_dir
   %w[ old new ].each do |filename|
     file redirect_dir + "/#{filename}file.html" do
