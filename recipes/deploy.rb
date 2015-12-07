@@ -4,6 +4,10 @@ private_key = data_bag_item('w_apache', 'deploykey')['private_key']
 gitlab_pub = data_bag_item('w_apache', 'gitlabkey')['public_key']
 jenkins_pub = data_bag_item('w_apache', 'jenkinskey')['public_key']
 
+execute 'changes shell for www-data' do
+  command 'sudo chsh -s /bin/sh www-data'
+end
+
 directory "/var/www/.ssh" do
   owner 'www-data'
   group 'www-data'
@@ -24,27 +28,20 @@ file '/var/www/.ssh/gitlab_pub' do
   group 'www-data'
 end
 
-execute 'add and delete gitlab_pub' do
-  command 'cat /var/www/.ssh/gitlab_pub >> /var/www/.ssh/known_hosts && rm /var/www/.ssh/gitlab_pub && chown www-data.www-data /var/www/.ssh/known_hosts'
+file '/var/www/.ssh/jenkins_pub' do
+  content jenkins_pub
+  owner 'www-data'
+  group 'www-data'
+end
+
+execute 'add and delete gitlab_pub for www-data' do
+  command 'cat /var/www/.ssh/gitlab_pub >> /var/www/.ssh/known_hosts && rm /var/www/.ssh/gitlab_pub'
   not_if "cat /var/www/.ssh/known_hosts | grep \"#{gitlab_pub}\""
 end
 
-directory "/root/.ssh" do
-  owner 'root'
-  group 'root'
-  mode '0700'
-  action :create
-end
-
-file '/root/.ssh/jenkins_pub' do
-  content jenkins_pub
-  owner 'root'
-  group 'root'
-end
-
-execute 'add and delete jenkins_pub' do
-  command 'cat /root/.ssh/jenkins_pub >> /root/.ssh/authorized_keys && rm /root/.ssh/jenkins_pub'
-  not_if "cat /root/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
+execute 'add and delete jenkins_pub for www-data' do
+  command 'cat /var/www/.ssh/jenkins_pub >> /var/www/.ssh/authorized_keys && rm /var/www/.ssh/jenkins_pub && chown -R www-data.www-data /var/www/.ssh'
+  not_if "cat /var/www/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
 end
 
 node['w_common']['web_apps'].each do |web_app|
