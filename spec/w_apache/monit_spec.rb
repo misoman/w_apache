@@ -3,6 +3,7 @@ require_relative '../spec_helper'
 describe 'w_apache::monit' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
+      node.set['w_apache']['haproxydb_enabled'] = true
     	node.set['w_memcached']['ips'] = ['127.0.0.1']
     	varnish = {
          "purge_target" => true
