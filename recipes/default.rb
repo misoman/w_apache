@@ -36,6 +36,17 @@ end
 include_recipe 'w_nfs::client' if node['w_apache']['nfs']['enabled']
 
 include_recipe 'apache2'
+
+begin
+  r = resources(template: "#{node['apache']['dir']}/mods-available/fastcgi.conf")
+  r.cookbook 'w_apache'
+  r.source 'fastcgi.conf.erb'
+  r.owner 'root'
+  r.group 'root'
+rescue Chef::Exceptions::ResourceNotFound
+  Chef::Log.warn 'could not find template to override!'
+end
+
 include_recipe 'w_apache::php'
 include_recipe 'w_apache::vhosts'
 

@@ -2,10 +2,24 @@ require_relative '../spec_helper'
 
 describe 'w_apache::default' do
 
+  let(:web_apps) do
+    [
+      { vhost: { main_domain: 'example.com', aliases: ['www.example.com', 'ex.com'], docroot: '/websites/example.com/www' },  deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_path: '/websites/example.com', repo_url: 'https://git.examplewebsite.com/www.git' },   mysql: [ { db: 'db', user: 'user', password: 'password' }],                  connection_domain: { webapp_domain: 'webapp.example.com', db_domain: 'db.example.com', varnish_domain: 'varnish.example.com' }, varnish: { purge_target: true }},
+      { vhost: { main_domain: 'example2.com',                                        docroot: '/websites/example2.com/sub' }, deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_path: '/websites/example2.com', repo_url: 'https://git.examplewebsite.com/www2.git' }, mysql: [ { db: ['db2', 'db3', 'db4'], user: 'user', password: 'password' }], connection_domain: { webapp_domain: 'webapp.example.com', db_domain: 'db.example.com' } },
+      { vhost: { main_domain: 'example3.com',                                        docroot: '/websites/example3.com/sub' }, deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_path: '/websites/example3.com', repo_url: 'https://git.examplewebsite.com/www3.git' }, mysql: [ { db: ['db2', 'db3', 'db4'], user: 'user', password: 'password' }], connection_domain: { webapp_domain: 'webapp.example.com', db_domain: 'db.example.com', varnish_domain: 'varnish.example.com' }, varnish: { purge_target: true }}
+      #,
+      #{ vhost: { main_domain: 'docroot-only-vhost.com', docroot: '/websites/dov'}}
+    ]
+  end
+
   before do
     stub_command("/usr/sbin/apache2 -t").and_return(true)
 	  stub_command("cat /websites/examplewebsite.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
+
 	  stub_command("cat /websites/example.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
+    stub_command("cat /websites/example2.com/.git/config | grep https://git.examplewebsite.com/www2.git").and_return(false)
+    stub_command("cat /websites/example3.com/.git/config | grep https://git.examplewebsite.com/www3.git").and_return(false)
+
 	  stub_command("cat /websites/examplewebsite.com/admin/.git/config | grep https://git.examplewebsite.com/admin.git").and_return(false)
     stub_command("lsof -u phpmyadmin | grep phpmyadmin").and_return(true)
     stub_data_bag('w_apache').and_return(['deploykey'])
@@ -34,30 +48,7 @@ describe 'w_apache::default' do
            "purge_target" => true
             }
 
-  			node.set['w_common']['web_apps'] = [
-          {"vhost" => {
-                  "main_domain" => "example.com",
-                  "aliases" => ['www.example.com', 'ex.com'],
-                  "docroot" => "/websites/example.com/www"
-                  },
-           "deploy" => {
-                  "repo_ip" => "9.9.9.9",
-                  "repo_domain" => "git.examplewebsite.com",
-                  "repo_path" => "/websites/example.com",
-                  "repo_url" => "https://git.examplewebsite.com/www.git"
-           },
-           "connection_domain" => {
-                   "db_domain" => "db.example.com",
-                   "webapp_domain" => "webapp.example.com",
-                   "varnish_domain" => "varnish.example.com"
-                  },
-           "mysql" =>  [
-                   {"db" => "dbname", "user" => "username", "password" => "password"},
-                   {"db" => "dbname2", "user" => "username2", "password" => "password2"}
-                   ],
-           "varnish" => varnish
-          }
-  			]
+  			node.set['w_common']['web_apps'] = web_apps
   			node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
   			node.set['apache']['access_file_name'] = '.htaccess'
   			node.set['apache']['listen_ports'] = [80]
@@ -98,12 +89,23 @@ describe 'w_apache::default' do
       end
     end
 
-  #	%w( config_test monit varnish_integration deploy phpmyadmin).each do |recipe|
-  #		it "runs recipe w_apache::#{recipe}" do
-  #			expect(chef_run).to include_recipe("w_apache::#{recipe}")
-  #		end
-  #	end
+    #	%w( config_test monit varnish_integration deploy phpmyadmin).each do |recipe|
+    #		it "runs recipe w_apache::#{recipe}" do
+    #			expect(chef_run).to include_recipe("w_apache::#{recipe}")
+    #		end
+    #	end
+
+    it 'creates fastcgi.conf file from w_apache/templates/default/fastcgi.conf.erb' do
+      expect(chef_run).to render_file('/etc/apache2/mods-available/fastcgi.conf').with_content { |content|
+        expect(content).to include('DirectoryIndex index.htm index.html index.php')
+        expect(content).to include('AddHandler php5-fcgi .php .htm .php3 .html .inc .tpl .cfg')
+        expect(content).to include('AddType text/html .php')
+        expect(content).to include('Action php5-fcgi /php5-fcgi')
+        expect(content).to include('Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi')
+        expect(content).to include('FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi')
+      }
     end
+  end
 
   context 'with Ubintu 14.04 trusty' do
     let(:chef_run) do
