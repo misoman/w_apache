@@ -16,7 +16,7 @@ cookbook 'apache2', '~> 3.1.0'
 cookbook 'php', git: 'https://github.com/joelhandwell/chef-php.git'
 cookbook 'php-fpm', git: 'https://github.com/yevgenko/cookbook-php-fpm.git'
 cookbook 'xdebug', git: 'https://github.com/joelhandwell/xdebug.git'
-cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: '0a8cef411aaa79420576f62a25f1e53a2e1b6e06'
+cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: 'dbc38b6878b60e159679a438acf08e1adfa019b6'
 
 cookbook 'nfs'
 cookbook 'cron'
