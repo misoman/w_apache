@@ -46,7 +46,9 @@ end
 
 node['w_common']['web_apps'].each do |web_app|
 
-	if web_app['deploy'].has_key? 'repo_ip' then
+  next unless web_app.has_key?('deploy')
+
+	if web_app['deploy'].has_key?('repo_ip') then
 
 		repo_ip = web_app['deploy']['repo_ip']
 		repo_domain = web_app['deploy']['repo_domain']
@@ -80,5 +82,4 @@ node['w_common']['web_apps'].each do |web_app|
 	  group 'www-data'
 	  not_if "cat #{dir}/.git/config | grep #{url}"
 	end
-
 end
