@@ -1,17 +1,21 @@
 node['w_common']['web_apps'].each do |web_app|
-  if web_app['mysql'].instance_of?(Chef::Node::ImmutableArray) then
-    databases = web_app['mysql']
-  else
-    databases = []
-    databases << web_app['mysql']
-  end
 
-  template  web_app['vhost']['docroot'] + '/config_test.php' do
-    source 'config_test.php.erb'
-    variables(
-      :db_domain => web_app['connection_domain']['db_domain'],
-      :databases => databases
-    )
+  if web_app.has_key?('mysql') and web_app.has_key?('connection_domain') then
+
+    if web_app['mysql'].instance_of?(Chef::Node::ImmutableArray) then
+      databases = web_app['mysql']
+    else
+      databases = []
+      databases << web_app['mysql']
+    end
+
+    template  web_app['vhost']['docroot'] + '/config_test.php' do
+      source 'config_test.php.erb'
+      variables(
+        :db_domain => web_app['connection_domain']['db_domain'],
+        :databases => databases
+      )
+    end
   end
 
   file web_app['vhost']['docroot'] + '/info.php' do
