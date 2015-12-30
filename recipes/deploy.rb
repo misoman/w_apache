@@ -47,11 +47,12 @@ end
 node['w_common']['web_apps'].each do |web_app|
 
 	if web_app['deploy'].has_key? 'repo_ip' then
-	
+
 		repo_ip = web_app['deploy']['repo_ip']
 		repo_domain = web_app['deploy']['repo_domain']
-	
-		hostsfile_entry repo_ip do
+
+		hostsfile_entry "#{repo_ip} for #{web_app['vhost']['main_domain']}" do
+      ip_address repo_ip
 		  hostname repo_domain
 		  action :append
 		  unique true
@@ -60,11 +61,11 @@ node['w_common']['web_apps'].each do |web_app|
 
   dir = web_app['deploy']['repo_path']
 	url = web_app['deploy']['repo_url']
-	
+
 	execute "make sure ownership of #{dir}" do
 	  command "chown -R www-data.www-data #{dir}"
 	end
-	
+
 	execute "git init for #{url}" do
 	  cwd dir
 	  command 'git init'
@@ -72,7 +73,7 @@ node['w_common']['web_apps'].each do |web_app|
 	  group 'www-data'
 	  creates "#{dir}/.git/HEAD"
 	end
-	
+
 	execute "git remote add origin #{url}" do
 	  cwd dir
 	  user 'www-data'
