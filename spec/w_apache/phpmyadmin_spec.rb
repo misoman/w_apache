@@ -14,36 +14,15 @@ describe 'w_apache::phpmyadmin' do
       ChefSpec::SoloRunner.new do |node|
         node.automatic['memory']['total'] = '4049656kB'
         node.automatic['memory']['swap']['total'] = '1024kB'
-        varnish = {
-           "purge_target" => true
-        }
-
-        node.set['w_common']['web_apps'] = [
-          {"vhost" => {
-                  "main_domain" => "example.com",
-                  "aliases" => ['www.example.com', 'ex.com'],
-                  "docroot" => "www"
-                  },
-           "connection_domain" => {
-                   "db_domain" => "db.example.com",
-                   "webapp_domain" => "webapp.example.com",
-                   "varnish_domain" => "varnish.example.com"
-                  },
-           "mysql" =>  [
-                   {"db" => "dbname", "user" => "username", "password" => "password"},
-                   {"db" => "dbname2", "user" => "username2", "password" => "password2"}
-                   ],
-           "varnish" => varnish
-          }
-        ]
+        node.set['w_common']['web_apps'] = web_apps
         node.set['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
-    
+
     it 'does not kill process executed by user phpmyadmin' do
       expect(chef_run).to_not run_execute('pkill -u phpmyadmin')
     end
-    
+
     it 'includes apache2::default recipe' do
       expect(chef_run).to include_recipe('apache2::default')
     end
@@ -56,7 +35,7 @@ describe 'w_apache::phpmyadmin' do
       conf_template = chef_run.template('/etc/apache2/conf-available/phpmyadmin.conf')
       expect(conf_template).to notify('service[apache2]').to(:reload).delayed
     end
-    
+
     it 'installs apache2-utils' do
       expect(chef_run).to install_package('apache2-utils')
     end
@@ -64,6 +43,5 @@ describe 'w_apache::phpmyadmin' do
     it 'execute htpasswd_create' do
       expect(chef_run).to run_execute('htpasswd -cbm /websites/phpmyadmin/.htpasswd user passwd')
     end
-
   end
 end

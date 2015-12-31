@@ -11,11 +11,22 @@
   DB Connection Test:
   <br/>
   <?php
-    <% @databases.each_with_index do |database, index| %>
-      $servername<%= index %> = "<%= @db_domain %>";
-      $username<%= index %>   = "<%= database['user'] %>";
-      $password<%= index %>   = "<%= database['password'] %>";
-      $database<%= index %>   = "<%= database['db'] %>";
+    <% @databases.each_with_index do |database, index|
+
+    if database['db'].instance_of?(Chef::Node::ImmutableArray) then
+      webapp_dbs = database['db']
+    else
+      webapp_dbs = []
+      webapp_dbs << database['db']
+    end
+
+    webapp_dbs.each_with_index do |webapp_db, index2|
+
+    %>
+      $servername<%= index %>-<%= index2 %>   = "<%= @db_domain %>";
+      $username  <%= index %>-<%= index2 %>   = "<%= database['user'] %>";
+      $password  <%= index %>-<%= index2 %>   = "<%= database['password'] %>";
+      $database  <%= index %>-<%= index2 %>   = "<%= webapp_db %>";
 
       // Create connection
       $conn<%= index %> = new mysqli($servername<%= index %>, $username<%= index %>, $password<%= index %>, $database<%= index %>);
@@ -23,10 +34,11 @@
       // Check connection
       if ($conn<%= index %>->connect_error) {
         echo ("Connection failed to host:<%= @db_domain %> database:<%= database['db'] %> error:" . $conn<%= index %>->connect_error . "<br/>");
-      }else{ 
+      }else{
         echo ("Connected to host:<%= @db_domain %> of database:<%= database['db'] %> successfully<br/>");
       }
-    <% end %>
+    <% end
+    end %>
   ?>
   <br/><br/>
 

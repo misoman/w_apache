@@ -2,16 +2,6 @@ package 'php-pear'
 package 'php5-dev'
 include_recipe 'php::fpm'
 
-begin
-  r = resources(template: "#{node['apache']['dir']}/mods-available/fastcgi.conf")
-  r.cookbook 'w_apache'
-  r.source 'fastcgi.conf.erb'
-  r.owner 'root'
-  r.group 'root'
-rescue Chef::Exceptions::ResourceNotFound
-  Chef::Log.warn 'could not find template to override!'
-end
-
 php_fpm 'php-fpm' do
   action :add
   user 'www-data'
