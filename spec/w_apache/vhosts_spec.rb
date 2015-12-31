@@ -3,13 +3,6 @@ require_relative '../spec_helper'
 describe 'w_apache::vhosts' do
   context 'with default setting' do
 
-    let(:web_apps) do
-      [
-        { vhost: { main_domain: 'example.com', docroot: '/websites/example.com/www', aliases: ['www.example.com', 'ex.com']}},
-        { vhost: { main_domain: 'example2.com', docroot: '/websites/example2.com/sub', aliases: ['www.example2.com', 'ex2.com']}}
-      ]
-    end
-
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_common']['web_apps'] = web_apps
@@ -21,12 +14,14 @@ describe 'w_apache::vhosts' do
       stub_command("/usr/sbin/apache2 -t").and_return(true)
     end
 
-    it 'creates directory /websites/example.com/www' do
+    it 'creates document root directory' do
       expect(chef_run).to create_directory('/websites/example.com/www').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('/websites/example2.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('/websites/example3.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('/websites/dov').with(owner: 'www-data', group: 'www-data', recursive: true)
     end
 
     it 'creates directory /websites/example2.com/sub' do
-      expect(chef_run).to create_directory('/websites/example2.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
     end
 
     describe '/etc/apache2/sites-available/example.com.conf' do
@@ -66,10 +61,6 @@ describe 'w_apache::vhosts' do
 
       it 'has doc root /websites/example2.com/sub' do
         expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('DocumentRoot /websites/example2.com/sub')
-      end
-
-      it 'has doc root /websites/example2.com' do
-        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('ServerAlias www.example2.com ex2.com')
       end
 
       it 'has directory index index.html index.htm index.php' do

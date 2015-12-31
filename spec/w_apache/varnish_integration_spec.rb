@@ -3,13 +3,6 @@ require_relative '../spec_helper'
 describe 'w_apache::varnish_integration' do
   context 'with default setting' do
 
-    let(:web_apps) do
-      [
-        { vhost: { main_domain: 'example.com' }, connection_domain: { varnish_domain: 'varnish.example.com' }, varnish: { purge_target: true}},
-        { vhost: { main_domain: 'example2.com' }, connection_domain: { varnish_domain: 'varnish.example.com' }, varnish: { purge_target: true}}
-      ]
-    end
-
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_common']['web_apps'] = web_apps
@@ -25,8 +18,6 @@ describe 'w_apache::varnish_integration' do
     it 'generates /etc/hosts file entries to enable communication btw web and varnish server' do
       expect(chef_run).to append_hostsfile_entry('7.7.7.7 0varnish.example.com for example.com').with(ip_address: '7.7.7.7', hostname: '0varnish.example.com', unique: true)
       expect(chef_run).to append_hostsfile_entry('8.8.8.8 1varnish.example.com for example.com').with(ip_address: '8.8.8.8', hostname: '1varnish.example.com', unique: true)
-      expect(chef_run).to append_hostsfile_entry('7.7.7.7 0varnish.example.com for example2.com').with(ip_address: '7.7.7.7', hostname: '0varnish.example.com', unique: true)
-      expect(chef_run).to append_hostsfile_entry('8.8.8.8 1varnish.example.com for example2.com').with(ip_address: '8.8.8.8', hostname: '1varnish.example.com', unique: true)
     end
   end
 end
