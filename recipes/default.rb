@@ -65,3 +65,4 @@ include_recipe 'w_apache::varnish_integration' if node['w_apache']['varnish_enab
 include_recipe 'w_apache::deploy' if node['w_apache']['deploy']['enabled']
 include_recipe 'w_apache::phpmyadmin' if node['w_apache']['phpmyadmin']['enabled']
 include_recipe 'w_apache::haproxydb' if node['w_apache']['haproxydb_enabled']
+include_recipe 'w_apache::ssl' if node['w_apache']['ssl_enabled']

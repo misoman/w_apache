@@ -25,7 +25,7 @@ default['xdebug']['directives'] = {
 default['w_apache']['xdebug_enabled'] = false
 default['w_apache']['varnish_enabled'] = true
 default['w_apache']['deploy']['enabled'] = false
-
+default['w_apache']['ssl_enabled'] = false
 default['w_apache']['phpmyadmin']['enabled'] = false
 
 default['phpmyadmin']['home'] = '/websites/phpmyadmin'

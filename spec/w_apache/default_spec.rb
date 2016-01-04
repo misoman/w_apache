@@ -48,6 +48,7 @@ describe 'w_apache::default' do
         node.set['w_apache']['deploy']['enabled'] = true
         node.set['w_apache']['phpmyadmin']['enabled'] = true
         node.set['w_apache']['haproxydb_enabled'] = true
+        node.set['w_apache']['ssl_enabled'] = false
         node.set['w_apache']['deploy']['repo_url'] = 'https://git.example.com/repo.git'
       end.converge(described_recipe)
     end
