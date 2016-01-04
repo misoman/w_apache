@@ -1,0 +1,26 @@
+#<% require 'kitchen-sync' %>
+#<% time = Time.new.strftime("%F %H:%M") %>
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  data_bags_path: test/fixtures/data_bags
+  roles_path: 'roles'
+  environments_path: environments
+  client_rb:
+    environment: testkitchen
+
+platforms:
+  - name: ubuntu-14.04
+  - name: ubuntu-12.04
+
+suites:
+  - name: test_w_apache
+    driver:
+      network:
+        - ["private_network", {ip: "172.31.6.12"}]
+    run_list:
+      - role[w_common_role]
+      - role[w_apache_role]

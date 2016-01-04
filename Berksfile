@@ -23,6 +23,7 @@ cookbook 'cron'
 cookbook 'haproxy', git: 'https://github.com/hw-cookbooks/haproxy.git', ref: 'a42d14ee291a95b68f79b50e46bcd6eefdb25a35'
 
 group :wrapper do
+  cookbook 'w_common', git: 'https://github.com/haapp/w_common.git'
   cookbook 'w_apache', path: './'
   cookbook 'w_nfs', git: 'https://github.com/haapp/w_nfs.git'
 end
