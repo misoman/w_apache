@@ -15,6 +15,7 @@ ChefSpec::Coverage.start! do
   add_filter(%r{[\/\\]nfs[\/\\]})
   add_filter(%r{[\/\\]haproxy[\/\\]})
   add_filter(%r{[\/\\]newrelic[\/\\]})
+  add_filter(%r{[\/\\]blackfire[\/\\]})
 end
 
 RSpec.configure do |config|

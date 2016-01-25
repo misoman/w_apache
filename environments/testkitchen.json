@@ -69,9 +69,10 @@
       "default_site_port": "80"
     },
     "w_apache": {
-      "xdebug_enabled": true,
+      "xdebug_enabled": false,
       "config_test_enabled": true,
       "newrelic_app_enabled": true,
+      "blackfire_enabled": true,
       "deploy":{
         "enabled": true
       },

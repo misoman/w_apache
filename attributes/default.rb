@@ -27,6 +27,8 @@ default['w_apache']['varnish_enabled'] = true
 default['w_apache']['deploy']['enabled'] = false
 default['w_apache']['newrelic_app_enabled'] = false
 default['w_apache']['newrelic']['app_name'] = 'PHP Application'
+default['w_apache']['blackfire_enabled'] = false
+default['blackfire']['php']['ini_path'] = '/etc/php5/fpm/conf.d/blackfire.ini'
 default['w_apache']['ssl_enabled'] = false
 default['w_apache']['phpmyadmin']['enabled'] = false
 
