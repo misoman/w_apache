@@ -71,6 +71,7 @@
     "w_apache": {
       "xdebug_enabled": true,
       "config_test_enabled": true,
+      "newrelic_app_enabled": true,
       "deploy":{
         "enabled": true
       },
