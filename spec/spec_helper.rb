@@ -14,6 +14,7 @@ ChefSpec::Coverage.start! do
   add_filter(%r{[\/\\]apt-repo[\/\\]})
   add_filter(%r{[\/\\]nfs[\/\\]})
   add_filter(%r{[\/\\]haproxy[\/\\]})
+  add_filter(%r{[\/\\]newrelic[\/\\]})
 end
 
 RSpec.configure do |config|
