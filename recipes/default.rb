@@ -62,6 +62,7 @@ end
 include_recipe 'w_apache::config_test' if node['w_apache']['config_test_enabled']
 include_recipe 'w_apache::monit' if node['monit_enabled']
 include_recipe 'w_apache::newrelic_app' if node['w_apache']['newrelic_app_enabled']
+include_recipe 'w_apache::blackfire' if node['w_apache']['blackfire_enabled']
 include_recipe 'w_apache::varnish_integration' if node['w_apache']['varnish_enabled']
 include_recipe 'w_apache::deploy' if node['w_apache']['deploy']['enabled']
 include_recipe 'w_apache::phpmyadmin' if node['w_apache']['phpmyadmin']['enabled']
