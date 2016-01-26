@@ -4,3 +4,6 @@
 [submodule "test/fixtures/roles"]
 	path = test/fixtures/roles
 	url = https://github.com/haapp/serverspec-roles.git
+[submodule "test/fixtures/environments"]
+	path = test/fixtures/environments
+	url = https://github.com/haapp/serverspec-environments.git
