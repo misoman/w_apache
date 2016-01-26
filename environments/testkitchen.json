@@ -65,7 +65,7 @@
       "multi_cookie_enabled": true
     },
     "apache": {
-      "listen_ports": ["80"],
+      "listen_ports": ["80", "443"],
       "default_site_port": "80"
     },
     "w_apache": {
@@ -73,6 +73,7 @@
       "config_test_enabled": true,
       "newrelic_app_enabled": true,
       "blackfire_enabled": true,
+      "ssl_enabled": true,
       "deploy":{
         "enabled": true
       },
