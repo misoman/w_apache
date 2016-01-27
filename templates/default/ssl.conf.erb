@@ -14,7 +14,9 @@
     SSLEngine on
     SSLCertificateFile <%= @params[:ssl_cert_file] %>
     SSLCertificateKeyFile <%= @params[:ssl_cert_key_file] %>
-    SSLCACertificateFile <%= @params[:ssl_cert_inter_file] %>   
+    <% if @params[:ssl_cert_inter_file] -%>
+    SSLCACertificateFile <%= @params[:ssl_cert_inter_file] %>
+    <% end -%>
   </IfModule>
 
   <Directory <%= @params[:docroot] %>>

@@ -6,20 +6,29 @@ certs.each do |certs_info|
 
   cert_info = data_bag_item('ssl', certs_info)
   cert_file = "/etc/ssl/certs/#{cert_info['id']}.crt"
-  cert_inter_file = "/etc/ssl/certs/#{cert_info['id']}CA.crt"
   cert_key_file = "/etc/ssl/private/#{cert_info['id']}.key"  
 
   file cert_file do
     content cert_info['cert']
   end
   
-  file cert_inter_file do
-    content cert_info['cert_inter']
-  end
-  
   file cert_key_file do
     content cert_info['private_key']
   end
+  
+  if "#{cert_info['cert_inter']}"
+    cert_inter_file = "/etc/ssl/certs/#{cert_info['id']}CA.crt" 
+  
+    file cert_inter_file do
+      content cert_info['cert_inter']
+      end
+  end
+    
+  directory cert_info['ssl_path'] do
+    owner 'www-data'
+    group 'www-data'
+    recursive true
+  end  
   
   web_app cert_info['id'] + '-ssl' do 
     cookbook 'w_apache'
