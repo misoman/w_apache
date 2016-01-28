@@ -21,6 +21,7 @@ cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', 
 cookbook 'nfs'
 cookbook 'cron'
 cookbook 'haproxy', git: 'https://github.com/hw-cookbooks/haproxy.git', ref: 'a42d14ee291a95b68f79b50e46bcd6eefdb25a35'
+cookbook 'composer'
 
 group :wrapper do
   cookbook 'w_common', git: 'https://github.com/haapp/w_common.git'

@@ -16,6 +16,7 @@ ChefSpec::Coverage.start! do
   add_filter(%r{[\/\\]haproxy[\/\\]})
   add_filter(%r{[\/\\]newrelic[\/\\]})
   add_filter(%r{[\/\\]blackfire[\/\\]})
+  add_filter(%r{[\/\\]composer[\/\\]})
 end
 
 RSpec.configure do |config|
