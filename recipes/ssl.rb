@@ -6,7 +6,7 @@ node['w_common']['web_apps'].each do |web_app|
   
   vhost = web_app['vhost']
   
-  if vhost['ssl'] then
+  if vhost.has_key?('ssl') then
 
     cert_info = data_bag_item('ssl', vhost['main_domain'])
     cert_file = "/etc/ssl/certs/#{cert_info['id']}.crt"
@@ -21,7 +21,7 @@ node['w_common']['web_apps'].each do |web_app|
       content cert_info['private_key']
     end
   
-    if cert_info['cert_inter'] then
+    if cert_info.has_key?('cert_inter') then
       cert_inter_file = "/etc/ssl/certs/#{cert_info['id']}CA.crt" 
     
       file cert_inter_file do
@@ -42,7 +42,7 @@ node['w_common']['web_apps'].each do |web_app|
       server_aliases vhost['aliases']
       docroot vhost['docroot']
       ssl_cert_file cert_file
-      ssl_cert_inter_file cert_inter_file
+      ssl_cert_inter_file cert_inter_file if cert_info.has_key?('cert_inter')
       ssl_cert_key_file cert_key_file
       allow_override 'All'
       directory_index ["index.html", "index.htm", "index.php"]
