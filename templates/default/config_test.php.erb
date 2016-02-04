@@ -23,19 +23,19 @@
     webapp_dbs.each_with_index do |webapp_db, index2|
 
     %>
-      $servername<%= index %>-<%= index2 %>   = "<%= @db_domain %>";
-      $username  <%= index %>-<%= index2 %>   = "<%= database['user'] %>";
-      $password  <%= index %>-<%= index2 %>   = "<%= database['password'] %>";
-      $database  <%= index %>-<%= index2 %>   = "<%= webapp_db %>";
+      $servername<%= index %>_<%= index2 %>   = "<%= @db_domain %>";
+      $username<%= index %>_<%= index2 %>   = "<%= database['user'] %>";
+      $password<%= index %>_<%= index2 %>   = "<%= database['password'] %>";
+      $database<%= index %>_<%= index2 %>   = "<%= webapp_db %>";
 
       // Create connection
-      $conn<%= index %> = new mysqli($servername<%= index %>, $username<%= index %>, $password<%= index %>, $database<%= index %>);
+      $conn<%= index %>_<%= index2 %> = new mysqli($servername<%= index %>_<%= index2 %>, $username<%= index %>_<%= index2 %>, $password<%= index %>_<%= index2 %>, $database<%= index %>_<%= index2 %>);
 
       // Check connection
-      if ($conn<%= index %>->connect_error) {
-        echo ("Connection failed to host:<%= @db_domain %> database:<%= database['db'] %> error:" . $conn<%= index %>->connect_error . "<br/>");
+      if ($conn<%= index %>_<%= index2 %>->connect_error) {
+        echo ("Connection failed to host:<%= @db_domain %> database:<%= webapp_db %> error:" . $conn<%= index %>_<%= index2 %>->connect_error . "<br/>");
       }else{
-        echo ("Connected to host:<%= @db_domain %> of database:<%= database['db'] %> successfully<br/>");
+        echo ("Connected to host:<%= @db_domain %> of database:<%= webapp_db %> successfully<br/>");
       }
     <% end
     end %>
