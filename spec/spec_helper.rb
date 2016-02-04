@@ -1,6 +1,8 @@
 require 'chefspec'
 require 'chefspec/berkshelf'
 require 'mymatchers'
+require 'coveralls'
+Coveralls.wear!
 
 ChefSpec::Coverage.start! do
   add_filter(%r{[\/\\]apt[\/\\]})

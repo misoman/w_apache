@@ -32,7 +32,7 @@ node['w_common']['web_apps'].each do |web_app|
 
   access_file_content = <<-eos
     RewriteEngine ON
-    Redirect 301 /redierct_test/oldfile.html /redierct_test/newfile.html
+    RewriteRule ^/redirect_test/oldfile.html$ /redirect_test/newfile.html [END,R=301]
   eos
   file redirect_dir + "/#{node['apache']['access_file_name']}" do
     content access_file_content

@@ -10,6 +10,7 @@ gem 'foodcritic'
 gem 'rake'
 gem 'rubocop'
 gem 'byebug'
+gem 'coveralls', require: false
 
 group :integration do
   gem 'serverspec'
