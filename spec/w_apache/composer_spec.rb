@@ -10,7 +10,7 @@ describe 'w_apache::composer' do
       node.set['w_apache']['composer_enabled'] = true
     end.converge(described_recipe)
   end
-  
+
   before do
     stub_command("php -m | grep 'Phar'").and_return(true)
   end
@@ -22,5 +22,4 @@ describe 'w_apache::composer' do
   it 'creates remote file /usr/local/bin/composer' do
     expect(chef_run).to create_remote_file('/usr/local/bin/composer')
   end
-  
 end

@@ -23,6 +23,9 @@ describe 'w_apache::config_test' do
       expect(chef_run).to create_file('/websites/example2.com/sub/info.php').with_content('<?php phpinfo(); ?>')
       expect(chef_run).to create_file('/websites/example3.com/sub/info.php').with_content('<?php phpinfo(); ?>')
       expect(chef_run).to create_file('/websites/dov/info.php').with_content('<?php phpinfo(); ?>')
+      expect(chef_run).to create_file('/websites/example.com/ssl/info.php').with_content('<?php phpinfo(); ?>')
+      expect(chef_run).to create_file('/websites/example.com/ssl_disabled/info.php').with_content('<?php phpinfo(); ?>')
+      expect(chef_run).to create_file('/websites/ssl-website-wic.com/info.php').with_content('<?php phpinfo(); ?>')
     end
 
     it 'prepares redirect test' do
@@ -30,6 +33,9 @@ describe 'w_apache::config_test' do
       expect(chef_run).to create_directory('/websites/example2.com/sub/redirect_test')
       expect(chef_run).to create_directory('/websites/example3.com/sub/redirect_test')
       expect(chef_run).to create_directory('/websites/dov/redirect_test')
+      expect(chef_run).to create_directory('/websites/example.com/ssl/redirect_test')
+      expect(chef_run).to create_directory('/websites/example.com/ssl_disabled/redirect_test')
+      expect(chef_run).to create_directory('/websites/ssl-website-wic.com/redirect_test')
     end
 
     %w[ old new ].each do |filename|
@@ -38,6 +44,9 @@ describe 'w_apache::config_test' do
         expect(chef_run).to create_file("/websites/example2.com/sub/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
         expect(chef_run).to create_file("/websites/example3.com/sub/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
         expect(chef_run).to create_file("/websites/dov/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
+        expect(chef_run).to create_file("/websites/example.com/ssl/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
+        expect(chef_run).to create_file("/websites/example.com/ssl_disabled/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
+        expect(chef_run).to create_file("/websites/ssl-website-wic.com/redirect_test/#{filename}file.html").with_content("<html><body>this is #{filename} file</body></html>")
       end
     end
 
@@ -50,6 +59,9 @@ describe 'w_apache::config_test' do
       expect(chef_run).to create_file('/websites/example2.com/sub/redirect_test/.htaccess').with_content(access_file_content)
       expect(chef_run).to create_file('/websites/example3.com/sub/redirect_test/.htaccess').with_content(access_file_content)
       expect(chef_run).to create_file('/websites/dov/redirect_test/.htaccess').with_content(access_file_content)
+      expect(chef_run).to create_file('/websites/example.com/ssl/redirect_test/.htaccess').with_content(access_file_content)
+      expect(chef_run).to create_file('/websites/example.com/ssl_disabled/redirect_test/.htaccess').with_content(access_file_content)
+      expect(chef_run).to create_file('/websites/ssl-website-wic.com/redirect_test/.htaccess').with_content(access_file_content)
     end
   end
 end
