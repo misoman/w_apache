@@ -51,7 +51,7 @@ describe 'w_apache::config_test' do
     end
 
     access_file_content = <<-eos
-    RewriteEngine ON\n    Redirect 301 /redierct_test/oldfile.html /redierct_test/newfile.html
+    RewriteEngine ON\n    RewriteRule ^/redirect_test/oldfile.html$ /redirect_test/newfile.html [END,R=301]
   eos
 
     it 'creates file /websites/example.com/www/redirect_test/.htaccess' do
