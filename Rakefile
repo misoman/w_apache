@@ -6,10 +6,6 @@ task all_tests: [
   :foodcritic, :chefspec
 ]
 
-# rubocop style checker
-require "rubocop/rake_task"
-RuboCop::RakeTask.new
-
 # foodcritic chef lint
 require "foodcritic"
 FoodCritic::Rake::LintTask.new

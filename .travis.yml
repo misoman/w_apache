@@ -1,22 +1,8 @@
-sudo: required
-
-# install the pre-release chef-dk.  Use chef-stable-precise to install the stable release
-addons:
-  apt:
-    sources:
-    - chef-current-precise
-    packages:
-    - chefdk
-
-# Don't `bundle install`
-install: echo "skip bundle install"
-
-# Ensure we make ChefDK's Ruby the default
-before_script:
-  - eval "$(/opt/chefdk/bin/chef shell-init bash)"
-  - /opt/chefdk/embedded/bin/chef gem install coveralls chef-sugar
+language: ruby
+bundler_args: --without integration
+rvm:
+  - 2.1.6
+cache: bundler
 script:
-  - /opt/chefdk/embedded/bin/chef --version
-  - /opt/chefdk/embedded/bin/foodcritic --version
-  - /opt/chefdk/embedded/bin/foodcritic . --exclude spec
-  - /opt/chefdk/embedded/bin/rspec
+  - bundle exec rake foodcritic
+  - bundle exec rake chefspec

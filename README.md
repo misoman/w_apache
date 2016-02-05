@@ -2,6 +2,7 @@ w_apache Cookbook
 ==================
 
 [![Build Status](https://travis-ci.org/haapp/w_apache.svg?branch=master)](https://travis-ci.org/haapp/w_apache)
+[![Coverage Status](https://coveralls.io/repos/github/haapp/w_apache/badge.svg?branch=master)](https://coveralls.io/github/haapp/w_apache?branch=master)
 
 Chef cookbook to instal and configure apache2 and php-fpm. Expecting high availability architecture setting Varnish or HAProxy in front, Percona XtraDB Cluster in back load balanced by HAProxy which is installed in the same virtual machine as apache. Optinaly adds NFS for sharing files among apache vms, xdebug and phpmyadmin for development, monit for monitoring.
 
@@ -23,10 +24,10 @@ Cookbook Dependency:
 * php  https://github.com/joelhandwell/chef-php
 * php-fpm  https://github.com/yevgenko/cookbook-php-fpm
 * xdebug  https://github.com/joelhandwell/xdebug
-* phpmyadmin  https://github.com/priestjim/chef-phpmyadmin 
+* phpmyadmin  https://github.com/priestjim/chef-phpmyadmin
 * nfs
 * cron
-* haproxy  https://github.com/fulloflilies/haproxy 
+* haproxy  https://github.com/fulloflilies/haproxy
 
 Supported Platform:
 Ubuntu 14.04, Ubuntu 12.04
@@ -66,6 +67,6 @@ bundle exec kithen test
 
 License and Authors
 -------------------
-Authors: 
-* Joel Handwell @joelhandwell 
+Authors:
+* Joel Handwell @joelhandwell
 * Full Of Lilies @fulloflilies
