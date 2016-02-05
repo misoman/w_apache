@@ -6,7 +6,6 @@ gem 'chef-zero'
 gem 'berkshelf', '~> 4.0.1'
 gem 'foodcritic'
 gem 'rake'
-gem 'rubocop'
 gem 'coveralls', require: false
 
 group :integration do
