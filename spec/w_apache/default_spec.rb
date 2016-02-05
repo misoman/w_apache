@@ -96,6 +96,10 @@ describe 'w_apache::default' do
         expect(content).to include('FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi')
       }
     end
+
+    it 'installs mysql client' do
+      expect(chef_run).to install_package('mysql-client')
+    end
   end
 
   context 'with Ubintu 14.04 trusty' do

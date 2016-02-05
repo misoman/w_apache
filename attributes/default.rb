@@ -29,6 +29,7 @@ default['w_apache']['newrelic_app_enabled'] = false
 default['w_apache']['newrelic']['app_name'] = 'PHP Application'
 default['w_apache']['blackfire_enabled'] = false
 default['w_apache']['composer_enabled'] = false
+default['w_apache']['install_mysql_client'] = true
 default['blackfire']['php']['ini_path'] = '/etc/php5/fpm/conf.d/blackfire.ini'
 default['w_apache']['ssl_enabled'] = false
 default['w_apache']['phpmyadmin']['enabled'] = false

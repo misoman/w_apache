@@ -69,3 +69,4 @@ include_recipe 'w_apache::phpmyadmin' if node['w_apache']['phpmyadmin']['enabled
 include_recipe 'w_apache::haproxydb' if node['w_apache']['haproxydb_enabled']
 include_recipe 'w_apache::ssl' if node['w_apache']['ssl_enabled']
 include_recipe 'w_apache::composer' if node['w_apache']['composer_enabled']
+package 'mysql-client' if node['w_apache']['install_mysql_client']
