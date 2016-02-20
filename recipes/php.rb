@@ -1,25 +1,59 @@
-package 'php-pear'
-package 'php5-dev'
-include_recipe 'php::fpm'
+directory node['php']['conf_dir'] do
+  owner 'root'
+  group 'root'
+  mode 00751
+  recursive true
+end
 
-php_fpm 'php-fpm' do
-  action :add
-  user 'www-data'
-  group 'www-data'
-  socket true
-  socket_path '/var/run/php5-fpm.sock'
-  terminate_timeout (node['php']['ini_settings']['max_execution_time'].to_i + 20)
-  valid_extensions %w( .php .htm .php3 .html .inc .tpl .cfg )
-  value_overrides({
-    :error_log => "#{node['php']['fpm_log_dir']}/php-fpm.log"
+include_recipe 'php::default'
+
+php_fpm_pool 'php-fpm' do
+  max_children 64
+  start_servers 4
+  min_spare_servers 4
+  max_spare_servers 32
+  additional_config({
+    'catch_workers_output' => 'no',
+    'listen.owner' => 'root',
+    'listen.group' => 'root',
+    'listen.mode' => '0666',
+    'pm.max_requests' => '10000',
+    'pm.status_path' => '/fpm-status',
+    'ping.path' => '/fpm-ping',
+    'ping.response' => 'pong',
+    'request_terminate_timeout' => '320',
+    'security.limit_extensions' => '.php .htm .php3 .html .inc .tpl .cfg',
+    'php_value[error_log]' => '/var/log/php5-fpm/php-fpm.log'
   })
 end
 
-package 'php5-mysql'
-package 'php5-memcached'
-package 'php5-gd'
-package 'php5-pspell'
-package 'php5-curl'
+service 'php-fpm' do
+  service_name 'php5-fpm'
+  action [:enable, :start]
+  provider(Chef::Provider::Service::Upstart)if (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
+end
+
+template "#{node['php']['conf_dir']}/php-fpm.conf" do
+  source 'php-fpm.conf.erb'
+  owner 'root'
+  group 'root'
+  notifies :restart, "service[php-fpm]"
+  mode 00644
+end
+
+directory node['php']['fpm_log_dir'] do
+  owner 'root'
+  group 'root'
+  mode 00755
+  action :create
+end
+
+template node['php']['fpm_rotfile'] do
+  source 'php-fpm.logrotate.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
+end
 
 if node['w_apache']['xdebug_enabled'] then
 
