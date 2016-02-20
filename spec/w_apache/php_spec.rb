@@ -22,7 +22,7 @@ describe 'w_apache::php' do
   end
 
   it 'runs resource php-fpm' do
-    expect(chef_run).to add_php_fpm('php-fpm').with(user: 'www-data', group: 'www-data', socket: true, socket_path: '/var/run/php-fpm-www.sock', terminate_timeout: 50, valid_extensions: %w( .php .htm .php3 .html .inc .tpl .cfg ), value_overrides: {
+    expect(chef_run).to add_php_fpm('php-fpm').with(user: 'www-data', group: 'www-data', socket: true, socket_path: '/var/run/php5-fpm.sock', terminate_timeout: 50, valid_extensions: %w( .php .htm .php3 .html .inc .tpl .cfg ), value_overrides: {
     :error_log => "/var/log/php-fpm/php-fpm.log"
   })
   end
