@@ -1,8 +1,19 @@
-directory node['php']['conf_dir'] do
+directory 'conf directory while package installation' do
+  path node['php']['conf_dir']
   owner 'root'
   group 'root'
-  mode 00751
+  mode 00755
   recursive true
+  not_if { node['php']['install_method'] == 'source' }
+end
+
+directory 'extra conf directory while package installation' do
+  path node['php']['ext_conf_dir']
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+  not_if { node['php']['install_method'] == 'source' }
 end
 
 include_recipe 'php::default'

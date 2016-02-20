@@ -9,12 +9,51 @@ default['apache']['default_modules'] = %w(
 default['php']['packages']      = %w( php5-cgi php5 php5-dev php5-cli php-pear php5-mysql php5-memcached php5-gd php5-pspell php5-curl )
 
 default['php']['conf_dir'] = '/etc/php5/fpm'
+default['php']['ext_conf_dir']  = '/etc/php5/conf.d'
 default['php']['apache_conf_dir'] = '/etc/php5/apache2'
 default['php']['cgi_conf_dir']  = '/etc/php5/cgi'
-default['php']['ext_conf_dir']  = '/etc/php5/conf.d'
 default['php']['pear_dir']      = '/usr/share/php'
 default['php']['session_dir']   = '/var/lib/php5/session5'
 default['php']['upload_dir']    = '/var/lib/php5/uploads'
+
+default['php']['configure_options'] = %W(--prefix=#{php['prefix_dir']}
+                                         --with-libdir=lib
+                                         --with-config-file-path=#{php['conf_dir']}
+                                         --with-config-file-scan-dir=#{php['ext_conf_dir']}
+                                         --with-pear
+                                         --enable-fpm
+                                         --with-fpm-user=#{php['fpm_user']}
+                                         --with-fpm-group=#{php['fpm_group']}
+                                         --with-zlib
+                                         --with-openssl
+                                         --with-kerberos
+                                         --with-bz2
+                                         --with-curl
+                                         --enable-ftp
+                                         --enable-zip
+                                         --enable-exif
+                                         --with-gd
+                                         --enable-gd-native-ttf
+                                         --with-gettext
+                                         --with-gmp
+                                         --with-mhash
+                                         --with-iconv
+                                         --with-imap
+                                         --with-imap-ssl
+                                         --enable-sockets
+                                         --enable-soap
+                                         --with-xmlrpc
+                                         --with-libevent-dir
+                                         --with-mcrypt
+                                         --enable-mbstring
+                                         --with-t1lib
+                                         --with-mysql
+                                         --with-mysqli=/usr/bin/mysql_config
+                                         --with-mysql-sock
+                                         --with-sqlite3
+                                         --with-pdo-mysql
+                                         --with-pdo-sqlite
+                                         --enable-shmop)
 
 default['php']['ini']['cookbook'] = 'w_apache'
 
