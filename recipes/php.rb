@@ -1,10 +1,49 @@
+source_install = node['php']['install_method'] == 'source'
+
+directory '/usr/lib/php5' do
+  owner 'root'
+  group 'root'
+  mode 00751
+  only_if { source_install }
+end
+
+template '/usr/lib/php5/php5-fpm-checkconf' do
+  source 'php-fpm-checkconf.erb'
+  owner 'root'
+  group 'root'
+  mode 00751
+  only_if { source_install }
+end
+
+template '/etc/init.d/php5-fpm' do
+  source 'php-fpm.init.d.erb'
+  owner 'root'
+  group 'root'
+  mode 00751
+  only_if { source_install }
+end
+
+template '/etc/init/php5-fpm.conf' do
+  source 'php-fpm.init.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 00751
+  only_if { source_install }
+end
+
+# work around until https://github.com/chef-cookbooks/php/pull/80 gets merged
+link '/usr/include/gmp.h' do
+  to '/usr/include/x86_64-linux-gnu/gmp.h'
+  only_if { source_install and node['platform_version'].eql? '14.04' }
+end
+
 directory 'conf directory while package installation' do
   path node['php']['conf_dir']
   owner 'root'
   group 'root'
   mode 00755
   recursive true
-  not_if { node['php']['install_method'] == 'source' }
+  not_if { source_install }
 end
 
 directory 'extra conf directory while package installation' do
@@ -13,10 +52,23 @@ directory 'extra conf directory while package installation' do
   group 'root'
   mode 00755
   recursive true
-  not_if { node['php']['install_method'] == 'source' }
+  not_if { source_install }
+end
+
+directory '/etc/php5/mods-available' do
+  owner 'root'
+  group 'root'
+  mode 00751
 end
 
 include_recipe 'php::default'
+
+directory '/etc/php5/fpm/pool.d' do
+  owner 'root'
+  group 'root'
+  mode 00751
+  only_if { source_install }
+end
 
 php_fpm_pool 'php-fpm' do
   max_children 64
@@ -36,12 +88,6 @@ php_fpm_pool 'php-fpm' do
     'security.limit_extensions' => '.php .htm .php3 .html .inc .tpl .cfg',
     'php_value[error_log]' => '/var/log/php5-fpm/php-fpm.log'
   })
-end
-
-service 'php-fpm' do
-  service_name 'php5-fpm'
-  action [:enable, :start]
-  provider(Chef::Provider::Service::Upstart)if (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
 end
 
 template "#{node['php']['conf_dir']}/php-fpm.conf" do
@@ -64,6 +110,12 @@ template node['php']['fpm_rotfile'] do
   owner 'root'
   group 'root'
   mode 00644
+end
+
+service 'php-fpm' do
+  service_name 'php5-fpm'
+  action [:enable, :start]
+  provider(Chef::Provider::Service::Upstart)if (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
 end
 
 if node['w_apache']['xdebug_enabled'] then

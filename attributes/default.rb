@@ -6,24 +6,29 @@ default['apache']['default_modules'] = %w(
   status alias auth_basic authn_core authn_file authz_core authz_groupfile
   authz_host authz_user autoindex dir env mime negotiation setenvif actions fastcgi expires cache
 )
+
+default['php']['version'] = '5.6.18'
+default['php']['checksum'] = '76da4150dc2da86b7b63b1aad3c20d1d11964796251ac0dd4d26d0a3f5045015'
 default['php']['packages']      = %w( php5-cgi php5 php5-dev php5-cli php-pear php5-mysql php5-memcached php5-gd php5-pspell php5-curl )
+default['php']['install_method'] = 'package'
 
 default['php']['conf_dir'] = '/etc/php5/fpm'
-default['php']['ext_conf_dir']  = '/etc/php5/conf.d'
+default['php']['ext_conf_dir']  = '/etc/php5/fpm/conf.d'
 default['php']['apache_conf_dir'] = '/etc/php5/apache2'
 default['php']['cgi_conf_dir']  = '/etc/php5/cgi'
 default['php']['pear_dir']      = '/usr/share/php'
 default['php']['session_dir']   = '/var/lib/php5/session5'
 default['php']['upload_dir']    = '/var/lib/php5/uploads'
 
-default['php']['configure_options'] = %W(--prefix=#{php['prefix_dir']}
+default['php']['configure_options'] = %W(--with-gmp
+                                         --prefix=#{default['php']['prefix_dir']}
                                          --with-libdir=lib
-                                         --with-config-file-path=#{php['conf_dir']}
-                                         --with-config-file-scan-dir=#{php['ext_conf_dir']}
+                                         --with-config-file-path=#{default['php']['conf_dir']}
+                                         --with-config-file-scan-dir=#{default['php']['ext_conf_dir']}
                                          --with-pear
                                          --enable-fpm
-                                         --with-fpm-user=#{php['fpm_user']}
-                                         --with-fpm-group=#{php['fpm_group']}
+                                         --with-fpm-user=#{default['php']['fpm_user']}
+                                         --with-fpm-group=#{default['php']['fpm_group']}
                                          --with-zlib
                                          --with-openssl
                                          --with-kerberos
@@ -35,7 +40,6 @@ default['php']['configure_options'] = %W(--prefix=#{php['prefix_dir']}
                                          --with-gd
                                          --enable-gd-native-ttf
                                          --with-gettext
-                                         --with-gmp
                                          --with-mhash
                                          --with-iconv
                                          --with-imap
