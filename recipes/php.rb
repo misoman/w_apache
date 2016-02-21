@@ -59,6 +59,7 @@ directory '/etc/php5/mods-available' do
   owner 'root'
   group 'root'
   mode 00751
+  recursive true
 end
 
 include_recipe 'php::default'

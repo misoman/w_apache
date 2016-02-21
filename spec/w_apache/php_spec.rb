@@ -23,7 +23,7 @@ describe 'w_apache::php' do
     it 'creates fpm config directory' do
       expect(chef_run).to create_directory('/etc/php5/fpm').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
       expect(chef_run).to create_directory('/etc/php5/fpm/conf.d').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
-      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751)
+      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751, recursive: true)
     end
 
     %w( default package ini ).each do |recipe|
@@ -126,7 +126,7 @@ describe 'w_apache::php' do
     end
 
     it 'creates directory for available modules' do
-      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751)
+      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751, recursive: true)
     end
 
     describe 'include_recipe php::default' do
