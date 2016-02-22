@@ -73,35 +73,4 @@ describe 'w_apache::vhosts' do
       end
     end
   end
-
-  context 'when nfs enabled' do
-    let(:web_apps) do
-      [
-        { vhost: { main_domain: 'example.com', docroot: '/websites/example.com/www', aliases: ['www.example.com', 'ex.com']}},
-        { vhost: { main_domain: 'example2.com', docroot: '/websites/example2.com/sub', aliases: ['www.example2.com', 'ex2.com']}}
-      ]
-    end
-
-    let(:chef_run) do
-      ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
-        node.set['w_apache']['nfs']['enabled'] = true
-      end.converge(described_recipe)
-    end
-
-    before do
-      stub_command("/usr/sbin/apache2 -t").and_return(true)
-    end
-
-#    it 'creates directory nfs data directory and symlink for example.com' do
-#      expect(chef_run).to create_directory('/exports/data/websites/www/data').with(owner: 'www-data', group: 'www-data')
-#      expect(chef_run).to create_link('/websites/www/data').with(to: '/exports/data/websites/www/data', owner: 'www-data', group: 'www-data')
-#    end
-#
-#    it 'creates directory nfs data directory and symlink for example2.com' do
-#      expect(chef_run).to create_directory('/exports/data/websites/example2.com/data').with(owner: 'www-data', group: 'www-data')
-#      expect(chef_run).to create_link('/websites/example2.com/data').with(to: '/exports/data/websites/example2.com/data', owner: 'www-data', group: 'www-data')
-#    end
-  end
 end
