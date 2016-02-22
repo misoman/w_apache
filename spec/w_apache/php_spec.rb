@@ -23,12 +23,28 @@ describe 'w_apache::php' do
     it 'creates fpm config directory' do
       expect(chef_run).to create_directory('/etc/php5/fpm').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
       expect(chef_run).to create_directory('/etc/php5/fpm/conf.d').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
-      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751, recursive: true)
+      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
     end
 
     %w( default package ini ).each do |recipe|
       it "includes php::#{recipe} recipe" do
         expect(chef_run).to include_recipe("php::#{recipe}")
+      end
+    end
+
+    it 'creates directory for php related scripts' do
+      expect(chef_run).to create_directory('/usr/lib/php5').with(owner: 'root', group: 'root', mode: 00755)
+    end
+
+    %w(maxlifetime php5-fpm-checkconf php5-fpm-reopenlogs sessionclean).each do |script|
+      it "creates #{script} script files" do
+        expect(chef_run).to create_template("/usr/lib/php5/#{script}").with(source: "php-lib-#{script}.erb", owner: 'root', group: 'root', mode: 00755)
+      end
+
+      if script.include?('php5-fpm') then
+        it "renders #{script} script with proper conf file location" do
+          expect(chef_run).to render_file("/usr/lib/php5/#{script}").with_content(/\/etc\/php5\/fpm\/php-fpm.conf/)
+        end
       end
     end
 
@@ -107,17 +123,12 @@ describe 'w_apache::php' do
       end.converge(described_recipe)
     end
 
-    it 'creates checkconfig script and directory for it' do
-      expect(chef_run).to create_directory('/usr/lib/php5').with(owner: 'root', group: 'root', mode: 00751)
-      expect(chef_run).to create_template('/usr/lib/php5/php5-fpm-checkconf').with(source: 'php-fpm-checkconf.erb', owner: 'root', group: 'root', mode: 00751)
-    end
-
     it 'creates init script to manage starting or stoping fpm service' do
-      expect(chef_run).to create_template('/etc/init.d/php5-fpm').with(source: 'php-fpm.init.d.erb', owner: 'root', group: 'root', mode: 00751)
+      expect(chef_run).to create_template('/etc/init.d/php5-fpm').with(source: 'php-fpm.init.d.erb', owner: 'root', group: 'root', mode: 00755)
     end
 
     it 'creates initialization configuration script for fpm service' do
-      expect(chef_run).to create_template('/etc/init/php5-fpm.conf').with(source: 'php-fpm.init.conf.erb', owner: 'root', group: 'root', mode: 00751)
+      expect(chef_run).to create_template('/etc/init/php5-fpm.conf').with(source: 'php-fpm.init.conf.erb', owner: 'root', group: 'root', mode: 00644)
     end
 
     # keep this until https://github.com/chef-cookbooks/php/pull/80 gets merged
@@ -126,7 +137,7 @@ describe 'w_apache::php' do
     end
 
     it 'creates directory for available modules' do
-      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00751, recursive: true)
+      expect(chef_run).to create_directory('/etc/php5/mods-available').with(owner: 'root', group: 'root', mode: 00755, recursive: true)
     end
 
     describe 'include_recipe php::default' do
@@ -173,8 +184,24 @@ describe 'w_apache::php' do
       end
     end
 
+    it 'creates directory for php related scripts' do
+      expect(chef_run).to create_directory('/usr/lib/php5').with(owner: 'root', group: 'root', mode: 00755)
+    end
+
+    %w(maxlifetime php5-fpm-checkconf php5-fpm-reopenlogs sessionclean).each do |script|
+      it "creates #{script} script files" do
+        expect(chef_run).to create_template("/usr/lib/php5/#{script}").with(source: "php-lib-#{script}.erb", owner: 'root', group: 'root', mode: 00755)
+      end
+
+      if script.include?('php5-fpm') then
+        it "renders #{script} script with proper conf file location" do
+          expect(chef_run).to render_file("/usr/lib/php5/#{script}").with_content(/\/etc\/php5\/fpm\/php-fpm.conf/)
+        end
+      end
+    end
+
     it 'creates directory for fpm pool' do
-      expect(chef_run).to create_directory('/etc/php5/fpm/pool.d').with(owner: 'root', group: 'root', mode: 00751)
+      expect(chef_run).to create_directory('/etc/php5/fpm/pool.d').with(owner: 'root', group: 'root', mode: 00755)
     end
 
     it 'creates fpm pool' do

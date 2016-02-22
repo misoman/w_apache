@@ -1,25 +1,10 @@
 source_install = node['php']['install_method'] == 'source'
 
-directory '/usr/lib/php5' do
-  owner 'root'
-  group 'root'
-  mode 00751
-  only_if { source_install }
-end
-
-template '/usr/lib/php5/php5-fpm-checkconf' do
-  source 'php-fpm-checkconf.erb'
-  owner 'root'
-  group 'root'
-  mode 00751
-  only_if { source_install }
-end
-
 template '/etc/init.d/php5-fpm' do
   source 'php-fpm.init.d.erb'
   owner 'root'
   group 'root'
-  mode 00751
+  mode 00755
   only_if { source_install }
 end
 
@@ -27,7 +12,7 @@ template '/etc/init/php5-fpm.conf' do
   source 'php-fpm.init.conf.erb'
   owner 'root'
   group 'root'
-  mode 00751
+  mode 00644
   only_if { source_install }
 end
 
@@ -58,16 +43,31 @@ end
 directory '/etc/php5/mods-available' do
   owner 'root'
   group 'root'
-  mode 00751
+  mode 00755
   recursive true
 end
 
 include_recipe 'php::default'
 
+directory '/usr/lib/php5' do
+  owner 'root'
+  group 'root'
+  mode 00755
+end
+
+%w(maxlifetime php5-fpm-checkconf php5-fpm-reopenlogs sessionclean).each do |script|
+  template "/usr/lib/php5/#{script}" do
+    source "php-lib-#{script}.erb"
+    owner 'root'
+    group 'root'
+    mode 00755
+  end
+end
+
 directory '/etc/php5/fpm/pool.d' do
   owner 'root'
   group 'root'
-  mode 00751
+  mode 00755
   only_if { source_install }
 end
 

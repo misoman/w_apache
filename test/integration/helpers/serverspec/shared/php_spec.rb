@@ -14,6 +14,59 @@ RSpec.shared_examples 'w_apache::php' do
     it { should_not exist }
   end
 
+  %w(maxlifetime php5-fpm-checkconf php5-fpm-reopenlogs sessionclean).each do |script|
+    describe file("/usr/lib/php5/#{script}") do
+      it { should be_file }
+      it { should be_owned_by 'root' }
+      it { should be_grouped_into 'root' }
+      it { should be_mode 755 }
+      its(:content) { should match /\/etc\/php5\/fpm\/php-fpm.conf/ } if script.include?('php5-fpm')
+    end
+  end
+
+  describe file('/etc/init.d/php5-fpm') do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode 755 }
+  end
+
+  describe file('/etc/init/php5-fpm.conf') do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode 644 }
+  end
+
+  describe file('/etc/php5/mods-available') do
+    it { should be_directory }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode 755 }
+  end
+
+  describe file('/etc/php5/fpm/php-fpm.conf') do
+    it { should be_file }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode 644 }
+    its(:content) { should match /pid(\s)+=(\s)+\/var\/run\/php5-fpm.pid/ }
+    its(:content) { should match /error_log(\s)+=(\s)+\/var\/log\/php5-fpm\/fpm-master.log/ }
+    its(:content) { should match /log_level(\s)+=(\s)+notice/ }
+    its(:content) { should match /emergency_restart_threshold(\s)+=(\s)+16/ }
+    its(:content) { should match /emergency_restart_interval(\s)+=(\s)+1h/ }
+    its(:content) { should match /process_control_timeout(\s)+=(\s)+30s/ }
+    its(:content) { should match /daemonize(\s)+=(\s)+yes/ }
+    its(:content) { should match /events.mechanism(\s)+=(\s)+epoll/ }
+  end
+
+  describe file('/etc/php5/fpm/conf.d') do
+    it { should be_directory }
+    it { should be_owned_by 'root' }
+    it { should be_grouped_into 'root' }
+    it { should be_mode 755 }
+  end
+
   describe file('/etc/php5/fpm/pool.d/php-fpm.conf') do
     it { should be_file }
     it { should be_owned_by 'root' }
@@ -41,21 +94,6 @@ RSpec.shared_examples 'w_apache::php' do
     its(:content) { should match /php_value\[error_log\](\s)+=(\s)+\/var\/log\/php5-fpm\/php-fpm.log/ }
   end
 
-  describe file('/etc/php5/fpm/php-fpm.conf') do
-    it { should be_file }
-    it { should be_owned_by 'root' }
-    it { should be_grouped_into 'root' }
-    it { should be_mode 644 }
-    its(:content) { should match /pid(\s)+=(\s)+\/var\/run\/php5-fpm.pid/ }
-    its(:content) { should match /error_log(\s)+=(\s)+\/var\/log\/php5-fpm\/fpm-master.log/ }
-    its(:content) { should match /log_level(\s)+=(\s)+notice/ }
-    its(:content) { should match /emergency_restart_threshold(\s)+=(\s)+16/ }
-    its(:content) { should match /emergency_restart_interval(\s)+=(\s)+1h/ }
-    its(:content) { should match /process_control_timeout(\s)+=(\s)+30s/ }
-    its(:content) { should match /daemonize(\s)+=(\s)+yes/ }
-    its(:content) { should match /events.mechanism(\s)+=(\s)+epoll/ }
-  end
-
   describe file('/var/run/php5-fpm.sock') do
     it { should be_socket }
     it { should be_owned_by 'root' }
@@ -64,7 +102,6 @@ RSpec.shared_examples 'w_apache::php' do
   end
 
   describe file('/etc/php5/fpm/php.ini') do
-    it { should be_file }
     it { should be_file }
     it { should be_owned_by 'root' }
     it { should be_grouped_into 'root' }
