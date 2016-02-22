@@ -1,25 +1,123 @@
-package 'php-pear'
-package 'php5-dev'
-include_recipe 'php::fpm'
+source_install = node['php']['install_method'] == 'source'
 
-php_fpm 'php-fpm' do
-  action :add
-  user 'www-data'
-  group 'www-data'
-  socket true
-  socket_path '/var/run/php5-fpm.sock'
-  terminate_timeout (node['php']['ini_settings']['max_execution_time'].to_i + 20)
-  valid_extensions %w( .php .htm .php3 .html .inc .tpl .cfg )
-  value_overrides({
-    :error_log => "#{node['php']['fpm_log_dir']}/php-fpm.log"
+template '/etc/init.d/php5-fpm' do
+  source 'php-fpm.init.d.erb'
+  owner 'root'
+  group 'root'
+  mode 00755
+  only_if { source_install }
+end
+
+template '/etc/init/php5-fpm.conf' do
+  source 'php-fpm.init.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
+  only_if { source_install }
+end
+
+# work around until https://github.com/chef-cookbooks/php/pull/80 gets merged
+link '/usr/include/gmp.h' do
+  to '/usr/include/x86_64-linux-gnu/gmp.h'
+  only_if { source_install and node['platform_version'].eql? '14.04' }
+end
+
+directory 'conf directory while package installation' do
+  path node['php']['conf_dir']
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+  not_if { source_install }
+end
+
+directory 'extra conf directory while package installation' do
+  path node['php']['ext_conf_dir']
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+  not_if { source_install }
+end
+
+directory '/etc/php5/mods-available' do
+  owner 'root'
+  group 'root'
+  mode 00755
+  recursive true
+end
+
+include_recipe 'php::default'
+
+directory '/usr/lib/php5' do
+  owner 'root'
+  group 'root'
+  mode 00755
+end
+
+%w(maxlifetime php5-fpm-checkconf php5-fpm-reopenlogs sessionclean).each do |script|
+  template "/usr/lib/php5/#{script}" do
+    source "php-lib-#{script}.erb"
+    owner 'root'
+    group 'root'
+    mode 00755
+  end
+end
+
+directory '/etc/php5/fpm/pool.d' do
+  owner 'root'
+  group 'root'
+  mode 00755
+  only_if { source_install }
+end
+
+php_fpm_pool 'php-fpm' do
+  max_children 64
+  start_servers 4
+  min_spare_servers 4
+  max_spare_servers 32
+  additional_config({
+    'catch_workers_output' => 'no',
+    'listen.owner' => 'root',
+    'listen.group' => 'root',
+    'listen.mode' => '0666',
+    'pm.max_requests' => '10000',
+    'pm.status_path' => '/fpm-status',
+    'ping.path' => '/fpm-ping',
+    'ping.response' => 'pong',
+    'request_terminate_timeout' => '320',
+    'security.limit_extensions' => '.php .htm .php3 .html .inc .tpl .cfg',
+    'php_value[error_log]' => '/var/log/php5-fpm/php-fpm.log'
   })
 end
 
-package 'php5-mysql'
-package 'php5-memcached'
-package 'php5-gd'
-package 'php5-pspell'
-package 'php5-curl'
+template "#{node['php']['conf_dir']}/php-fpm.conf" do
+  source 'php-fpm.conf.erb'
+  owner 'root'
+  group 'root'
+  notifies :restart, "service[php-fpm]"
+  mode 00644
+end
+
+directory node['php']['fpm_log_dir'] do
+  owner 'root'
+  group 'root'
+  mode 00755
+  action :create
+end
+
+template node['php']['fpm_rotfile'] do
+  source 'php-fpm.logrotate.erb'
+  owner 'root'
+  group 'root'
+  mode 00644
+end
+
+service 'php-fpm' do
+  service_name 'php5-fpm'
+  action [:enable, :start]
+  provider(Chef::Provider::Service::Upstart)if (platform?('ubuntu') && node['platform_version'].to_f >= 14.04)
+end
 
 if node['w_apache']['xdebug_enabled'] then
 

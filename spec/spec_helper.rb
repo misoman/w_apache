@@ -12,6 +12,7 @@ ChefSpec::Coverage.start! do
   add_filter(%r{[\/\\]xdebug[\/\\]})
   add_filter(%r{[\/\\]monit[\/\\]})
   add_filter(%r{[\/\\]build-essential[\/\\]})
+  add_filter(%r{[\/\\]xml[\/\\]})
   add_filter(%r{[\/\\]git[\/\\]})
   add_filter(%r{[\/\\]apt-repo[\/\\]})
   add_filter(%r{[\/\\]nfs[\/\\]})
