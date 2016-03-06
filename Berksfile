@@ -13,12 +13,13 @@ cookbook 'sudo'
 cookbook 'timezone-ii'
 
 cookbook 'apache2', '~> 3.1.0'
-cookbook 'php', git: 'https://github.com/chef-cookbooks/php.git', ref: 'f4b02ba37d6be7d115aa64ef04766986ebc2aaed'
+cookbook 'php', '~> 1.8.0'
 cookbook 'xdebug', git: 'https://github.com/joelhandwell/xdebug.git', ref: 'c336a7b4abbc5cf66bf68e29c7d293d584e001a6'
 cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: 'dbc38b6878b60e159679a438acf08e1adfa019b6'
+cookbook 'newrelic', '~> 2.18.0'
 
 cookbook 'nfs'
-cookbook 'cron'
+cookbook 'cron', '~> 1.7.5'
 cookbook 'haproxy', git: 'https://github.com/hw-cookbooks/haproxy.git', ref: 'a42d14ee291a95b68f79b50e46bcd6eefdb25a35'
 cookbook 'composer'
 

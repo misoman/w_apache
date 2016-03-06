@@ -9,6 +9,8 @@ describe 'w_apache::default' do
     stub_command("cat /websites/example.com/.git/config | grep https://git.examplewebsite.com/www.git").and_return(false)
     stub_command("cat /websites/example2.com/.git/config | grep https://git.examplewebsite.com/www2.git").and_return(false)
     stub_command("cat /websites/example3.com/.git/config | grep https://git.examplewebsite.com/www3.git").and_return(false)
+    stub_command("cat /websites/multi-repo-vhost.com/.git/config | grep https://git.examplewebsite.com/multi-repo-vhost.com-repo1.git").and_return(false)
+    stub_command("cat /websites/multi-repo-vhost.com/repo2/.git/config | grep https://git.examplewebsite.com/multi-repo-vhost.com-repo2.git").and_return(false)
 
     stub_command("cat /websites/examplewebsite.com/admin/.git/config | grep https://git.examplewebsite.com/admin.git").and_return(false)
     stub_command("lsof -u phpmyadmin | grep phpmyadmin").and_return(true)
