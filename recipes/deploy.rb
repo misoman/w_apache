@@ -48,38 +48,48 @@ node['w_common']['web_apps'].each do |web_app|
 
   next unless web_app.has_key?('deploy')
 
-	if web_app['deploy'].has_key?('repo_ip') then
+  if web_app['deploy'].instance_of?(Chef::Node::ImmutableArray) then
+    repos = web_app['deploy']
+  else
+    repos = []
+    repos << web_app['deploy']
+  end
 
-		repo_ip = web_app['deploy']['repo_ip']
-		repo_domain = web_app['deploy']['repo_domain']
+  repos.each do |repo|
 
-		hostsfile_entry "#{repo_ip} for #{web_app['vhost']['main_domain']}" do
-      ip_address repo_ip
-		  hostname repo_domain
-		  action :append
-		  unique true
-		end
-	end
+    if repo.has_key?('repo_ip') then
 
-  dir = web_app['deploy']['repo_path']
-	url = web_app['deploy']['repo_url']
+      repo_ip = repo['repo_ip']
+      repo_domain = repo['repo_domain']
 
-	execute "make sure ownership of #{dir}" do
-	  command "chown -R www-data.www-data #{dir}"
-	end
+      hostsfile_entry "#{repo_ip} for #{web_app['vhost']['main_domain']}" do
+        ip_address repo_ip
+        hostname repo_domain
+        action :append
+        unique true
+      end
+    end
 
-	execute "git init for #{url}" do
-	  cwd dir
-	  command 'git init'
-	  user 'www-data'
-	  group 'www-data'
-	  creates "#{dir}/.git/HEAD"
-	end
+    dir = repo['repo_path']
+    url = repo['repo_url']
 
-	execute "git remote add origin #{url}" do
-	  cwd dir
-	  user 'www-data'
-	  group 'www-data'
-	  not_if "cat #{dir}/.git/config | grep #{url}"
-	end
+    execute "make sure ownership of #{dir}" do
+      command "chown -R www-data.www-data #{dir}"
+    end
+
+    execute "git init for #{url}" do
+      cwd dir
+      command 'git init'
+      user 'www-data'
+      group 'www-data'
+      creates "#{dir}/.git/HEAD"
+    end
+
+    execute "git remote add origin #{url}" do
+      cwd dir
+      user 'www-data'
+      group 'www-data'
+      not_if "cat #{dir}/.git/config | grep #{url}"
+    end
+  end
 end
