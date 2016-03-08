@@ -111,33 +111,7 @@ describe 'w_apache::default' do
         node.automatic["lsb"]["codename"] = 'trusty'
         node.automatic['platform'] = 'ubuntu'
         node.automatic['platform_version'] = '14.04'
-        varnish = {
-           "purge_target" => true
-            }
-        node.set['w_common']['web_apps'] = [
-          {"vhost" => {
-                  "main_domain" => "example.com",
-                  "aliases" => ['www.example.com', 'ex.com'],
-                  "docroot" => "/websites/example.com/www"
-                  },
-           "deploy" => {
-                  "repo_ip" => "9.9.9.9",
-                  "repo_domain" => "git.examplewebsite.com",
-                  "repo_path" => "/websites/example.com",
-                  "repo_url" => "https://git.examplewebsite.com/www.git"
-           },
-           "connection_domain" => {
-                   "db_domain" => "db.example.com",
-                   "webapp_domain" => "webapp.example.com",
-                   "varnish_domain" => "varnish.example.com"
-                  },
-           "mysql" =>  [
-                   {"db" => "dbname", "user" => "username", "password" => "password"},
-                   {"db" => "dbname2", "user" => "username2", "password" => "password2"}
-                   ],
-           "varnish" => varnish
-          }
-        ]
+        node.set['w_common']['web_apps'] = web_apps
         node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
       end.converge(described_recipe)
     end

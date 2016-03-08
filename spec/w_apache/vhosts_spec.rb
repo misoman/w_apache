@@ -19,8 +19,11 @@ describe 'w_apache::vhosts' do
       expect(chef_run).to create_directory('/websites/example2.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
       expect(chef_run).to create_directory('/websites/example3.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
       expect(chef_run).to create_directory('/websites/dov').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).not_to create_directory('/websites/dcd').with(owner: 'www-data', group: 'www-data', recursive: true)
       expect(chef_run).to create_directory('/websites/multi-repo-vhost').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('/websites/example.com/ssl').with(owner: 'www-data', group: 'www-data', recursive: true)
       expect(chef_run).to create_directory('/websites/example.com/ssl_disabled').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('/websites/ssl-website-wic.com').with(owner: 'www-data', group: 'www-data', recursive: true)
     end
 
     it 'creates directory /websites/example2.com/sub' do
