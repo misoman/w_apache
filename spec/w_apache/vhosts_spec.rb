@@ -15,12 +15,15 @@ describe 'w_apache::vhosts' do
     end
 
     it 'creates document root directory' do
-      expect(chef_run).to create_directory('/websites/example.com/www').with(owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('/websites/example2.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('/websites/example3.com/sub').with(owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('/websites/dov').with(owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('/websites/multi-repo-vhost').with(owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('/websites/example.com/ssl_disabled').with(owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for example.com'                      ).with(path: '/websites/example.com/www'         , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for example2.com'                     ).with(path: '/websites/example2.com/sub'        , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for example3.com'                     ).with(path: '/websites/example3.com/sub'        , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for docroot-only-vhost.com'           ).with(path: '/websites/dov'                     , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).not_to create_directory('document root for docroot-create-disable.com'   ).with(path: '/websites/dcd'                     , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for multi-repo-vhost.com'             ).with(path: '/websites/multi-repo-vhost'        , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for ssl.example.com'                  ).with(path: '/websites/example.com/ssl'         , owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for ssl-disabled.example.com'         ).with(path: '/websites/example.com/ssl_disabled', owner: 'www-data', group: 'www-data', recursive: true)
+      expect(chef_run).to create_directory('document root for ssl-without-intermediate-cert.com').with(path: '/websites/ssl-website-wic.com'     , owner: 'www-data', group: 'www-data', recursive: true)
     end
 
     it 'creates directory /websites/example2.com/sub' do

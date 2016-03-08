@@ -2,10 +2,12 @@ node['w_common']['web_apps'].each do |web_app|
 
   vhost = web_app['vhost']
 
-  directory vhost['docroot'] do
+  directory "document root for #{vhost['main_domain']}" do
+    path vhost['docroot']
     owner 'www-data'
     group 'www-data'
     recursive true
+    not_if { web_app['vhost'].has_key?('create_docroot_dir') && web_app['vhost']['create_docroot_dir'] == false }
   end
 
   web_app vhost['main_domain'] do
@@ -16,22 +18,4 @@ node['w_common']['web_apps'].each do |web_app|
     allow_override 'All'
     directory_index ["index.html", "index.htm", "index.php"]
   end
-
-# commented until this is resolved
-#  if node['w_apache']['nfs']['enabled'] then
-#    data_link = document_root + '/' + node['w_apache']['nfs']['data_dir_name']
-#    data_dir =  node['nfs']['directory'] + node['nfs']['subtree'] + '/websites/' + dir + '/' + node['w_apache']['nfs']['data_dir_name']
-#
-#    directory data_dir do
-#      owner 'www-data'
-#      group 'www-data'
-#      recursive true
-#    end
-#
-#    link data_link do
-#      to data_dir
-#      owner 'www-data'
-#      group 'www-data'
-#    end
-#  end
 end
