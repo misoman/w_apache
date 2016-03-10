@@ -47,7 +47,7 @@ rescue Chef::Exceptions::ResourceNotFound
   Chef::Log.warn 'could not find template to override!'
 end
 
-include_recipe 'w_apache::php'
+include_recipe "w_apache::php_#{node['php']['install_method']}"
 include_recipe 'w_apache::vhosts'
 
 firewall 'default'

@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe 'w_apache::php' do
+describe 'w_apache::php_package' do
 
   context 'by default install php #{version} from package' do
 
