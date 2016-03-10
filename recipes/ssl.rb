@@ -12,7 +12,6 @@ node['w_common']['web_apps'].each do |web_app|
 
     cert_info = data_bag_item('ssl', vhost['main_domain'])
     cert_file = "/etc/ssl/certs/#{cert_info['id']}.crt"
-    cert_inter_file = "/etc/ssl/certs/#{cert_info['id']}CA.crt"
     cert_key_file = "/etc/ssl/private/#{cert_info['id']}.key"
 
     file cert_file do
