@@ -4,3 +4,6 @@
 [submodule "test/fixtures/environments"]
 	path = test/fixtures/environments
 	url = https://github.com/haapp/serverspec-environments.git
+[submodule "test\\integration\\helpers\\serverspec\\w_apache"]
+	path = test\\integration\\helpers\\serverspec\\w_apache
+	url = git@github.com:haapp/serverspec-w_apache.git

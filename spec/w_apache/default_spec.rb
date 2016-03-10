@@ -68,7 +68,7 @@ describe 'w_apache::default' do
     end
 
     it 'runs recipe w_apache::php, and w_apache::vhosts' do
-      expect(chef_run).to include_recipe('w_apache::php')
+      expect(chef_run).to include_recipe('w_apache::php_package')
       expect(chef_run).to include_recipe('w_apache::vhosts')
     end
 
@@ -121,7 +121,5 @@ describe 'w_apache::default' do
       expect(chef_run).to add_apt_repository('updates-multiverse').with(uri: 'http://archive.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-updates', deb_src: true)
       expect(chef_run).to add_apt_repository('security-multiverse-src').with(uri: 'http://security.ubuntu.com/ubuntu', components: ['multiverse'], distribution: 'trusty-security', deb_src: true)
     end
-
   end
-
 end
