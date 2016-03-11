@@ -32,46 +32,6 @@ suites:
       - role[w_apache_role]
     attributes: {
       "php": {
-        "install_method": "source",
-        "configure_options": [
-          '--with-gmp',
-          '--prefix=/usr/local',
-          '--with-libdir=lib',
-          '--with-config-file-path=/etc/php5/fpm',
-          '--with-config-file-scan-dir=/etc/php5/conf.d',
-          '--with-pear',
-          '--enable-fpm',
-          '--with-fpm-user=www-data',
-          '--with-fpm-group=www-data',
-          '--with-zlib',
-          '--with-openssl',
-          '--with-kerberos',
-          '--with-bz2',
-          '--with-curl',
-          '--enable-ftp',
-          '--enable-zip',
-          '--enable-exif',
-          '--with-gd',
-          '--enable-gd-native-ttf',
-          '--with-gettext',
-          '--with-mhash',
-          '--with-iconv',
-          '--with-imap',
-          '--with-imap-ssl',
-          '--enable-sockets',
-          '--enable-soap',
-          '--with-xmlrpc',
-          '--with-libevent-dir',
-          '--with-mcrypt',
-          '--enable-mbstring',
-          '--with-t1lib',
-          '--with-mysql',
-          '--with-mysqli=/usr/bin/mysql_config',
-          '--with-mysql-sock',
-          '--with-sqlite3',
-          '--with-pdo-mysql',
-          '--with-pdo-sqlite',
-          '--enable-shmop'
-        ]
+        "install_method": "source"
       }
     }
