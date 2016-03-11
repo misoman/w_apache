@@ -30,11 +30,13 @@ node['w_common']['web_apps'].each do |web_app|
       end
     end
 
-    directory vhost['docroot'] do
-      owner 'www-data'
-      group 'www-data'
-      recursive true
-    end
+    # need to add optin to only enable https, and disable http, and in that case, following code is needed
+    # directory vhost['docroot'] do
+    #   owner 'www-data'
+    #   group 'www-data'
+    #   recursive true
+    #   not_if { web_app['vhost'].has_key?('create_docroot_dir') && web_app['vhost']['create_docroot_dir'] == false }
+    # end
 
     web_app cert_info['id'] + '-ssl' do
       cookbook 'w_apache'

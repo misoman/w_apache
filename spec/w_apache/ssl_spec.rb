@@ -64,10 +64,11 @@ describe 'w_apache::ssl' do
     expect(chef_run).to create_file('/etc/ssl/private/ssl-without-intermediate-cert.com.key').with(content: '-----BEGIN RSA PRIVATE KEY-----\nProc-Type: 4,ENCRYPTED\nDEK-Info: DES-EDE3-CBC,H7F2CE4EA23BE5B4\n\nvee/I75R0Gyfbz4dgQRwcJNGoBZ9YGscj+rvGgH5/5aj8cOSYigUOUq8wLIpMNyy\nv33fSRZ4SHOnGUDMkyChWaCmPHemwr7q688GdQUjqAIz9TSAKTQyXMy5KcGOPr7v\n2XX0I57WdNFHpeqJEeq88g3HLBMjnosiqcoR+9JMEIyzvW9FY5qKk7MAjXmT2NLm\nF1TO1Dt7jZiiW46ROapor/u5/ADblr0h595qAnzdX518cRIjKSeLUxoVp9N22Q+C\nvwHd+RGfg5X6Ml+YG2E9kiukxOxV7/Zg/SzEcV3/2ZVbzbKhWffz858JYZNiFzX6\nN1utO53MkTr6n2t2iGcW3LMkH4lSC/hnwWUuQEf0HR58RmW6OZ/K0+CEf7IMPl+l\nS+FnQSmoksD6KK8w8GBEUUSc4zSx7x0gWo/e8oFhQqocTzkV5AtormiW1nq4GeQD\nRqQwa440z7sHoMAwiUZdfwJf07hFLAPghu/jqlukwxp17wJG6ga1/ah4Xw/3CINr\nIl6TvW5MevFvrd58hz/MsFanJrdSjKC3cnScDdwSTiYEjOecJMXLl+YkyBmtHrzt\nQTL02cIEtj1d6R6xPliKTWwT0DkyiaKi7H51EMzsaRxLgrgjTzzxBjg1zAB+Nf6x\nS/1oY8M/uEUMjXMIpohbIXkLN0JhVVWoubDDFzp2UqSmS2KgtI/48atTzEMOUW4O\nBndVngsmeroeRTuGmkXbYRKQcNWIf8vZAYNeEXklOL5oxWxGmtwj1wGaNYIb52N+\n5CQ9d2CBBp8S1iN22RPHbIy8Nr36ma79qqjKpgVghICOs71+vBZpDfva35ynpwmr\nvcpS+GfR/tJFAB4R9CwNyOlnHmz6JiZ9Wj74Ovgq+yrNeO8dUF0itP1m/KTU8Shi\nrz5Db1G1cd0biNEwAlVsGgxWRtjeP2OgZwRER/4BZnJLQHkxvCRxI4WmjBqJNYC2\ng4zYLyzyA/g6dPu76cjdHDjiX2/onKvw2H6wcAtUFOcGTTZFkwenOkpegj0nhqoo\nF51OGpW1YN7cG/H3/kQ5g23fmXwRTVGqguBT2TIKM8kMCfmsbgEUQ8UgAsYWyFwd\n1RDlg1k+WfFgpGg+7qa+C11A4qXefgk9mAK0vzHTULPCOmSVWp5k3ozkupsQtBbE\nkNZnDpQmwPd15HSRWWrx3AqSOGSLW70co4KMpSiD81yvu/s+15opRVgEdwMBUeaj\ni28Bjj6750J/SCY9xWUxlkYf4gCNJc5cqR4BrGTNedtr0hiWCQq6XZp1ICu1eVdH\nEd5Bt4LY1iwAsnzL0/P/i9uVkAyJuVpMeC1NUPH7ObcH0rYHYhSHTyJf1QvXg7Aj\n1CbjSfS/0G4hvs1hNp9KuAJ0afCUnIc7pW0iwlnm3DEVtIp686q1Aes+2vna0fog\nbLtci0vaOFXWpSCy7Cp/K/VyxGLiyRWfLCYTn7BHPhr5qPnBuhoF1Tta6c6hys7d\n4G3wYnSiOyDnRSnrWz1oFwHxS9y8oFez1e7gtNoL7z70TsyJo8S7IPkRu2V6Ek7x\n42M83ZW5dVFvGF2TyeDhhMnt3OKv4/zjvAMs9wAgxbNI2uFxCkX/8kYprA1Ptw2o\n-----END RSA PRIVATE KEY-----')
   end
 
-  it 'creates directory /websites/example.com/ssl and /websites/ssl-website-wic.com' do
-    expect(chef_run).to create_directory('/websites/example.com/ssl').with(owner: 'www-data', group: 'www-data', recursive: true)
-    expect(chef_run).to create_directory('/websites/ssl-website-wic.com').with(owner: 'www-data', group: 'www-data', recursive: true)
-  end
+  # need to add optin to only enable https, and disable http, and in that case, following code is needed
+  # it 'creates directory /websites/example.com/ssl and /websites/ssl-website-wic.com' do
+  #   expect(chef_run).to create_directory('/websites/example.com/ssl').with(owner: 'www-data', group: 'www-data', recursive: true)
+  #   expect(chef_run).to create_directory('/websites/ssl-website-wic.com').with(owner: 'www-data', group: 'www-data', recursive: true)
+  # end
 
   describe '/etc/apache2/sites-available/ssl.example.com-ssl.conf' do
     it 'is created' do
