@@ -19,19 +19,19 @@ provisioner:
 
 platforms:
   - name: ubuntu-14.04
-  - name: ubuntu-12.04
+  #- name: ubuntu-12.04
 
 suites:
   - name: php5_package
     run_list:
       - role[w_common_role]
       - role[w_apache_role]
-  - name: php5_source
+  - name: php7_package
     run_list:
       - role[w_common_role]
       - role[w_apache_role]
     attributes: {
       "php": {
-        "install_method": "source"
+        "version": "7.0.3"
       }
     }

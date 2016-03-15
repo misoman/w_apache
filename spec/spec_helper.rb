@@ -40,3 +40,10 @@ def web_apps
     { vhost: { main_domain: 'ssl-without-intermediate-cert.com',              ssl: true, docroot: '/websites/ssl-website-wic.com' }}
   ]
 end
+
+def php_versions
+  [
+    { full: '5.6.18', minor: '5.6' },
+    { full: '7.0.3', minor: '7.0' }
+  ]
+end

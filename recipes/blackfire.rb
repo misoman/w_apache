@@ -11,3 +11,5 @@ node.set['blackfire']['php']['server_id'] = blackfire['server_id']
 node.set['blackfire']['php']['server_token'] = blackfire['server_token']
 
 include_recipe 'blackfire'
+
+execute 'phpenmod blackfire'
