@@ -57,7 +57,16 @@ template "/etc/php/#{minor_version}/fpm/php-fpm.conf" do
   notifies :restart, "service[#{node['php']['fpm_service']}]"
 end
 
-include_recipe 'php::ini'
+[node['php']['cli_conf_dir'], node['php']['conf_dir']].each do |conf_dir|
+  template "#{conf_dir}/php.ini" do
+    source node['php']['ini']['template']
+    cookbook node['php']['ini']['cookbook']
+    owner 'root'
+    group node['root_group']
+    mode '0644'
+    variables(directives: node['php']['directives'])
+  end
+end
 
 link '/etc/alternatives/php' do
   to '/usr/bin/php5.6'

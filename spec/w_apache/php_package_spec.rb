@@ -38,13 +38,19 @@ describe 'w_apache::php_package' do
         expect(chef_run).to update_php_pear_channel('pecl.php.net')
       end
 
-      # php5.6-xsl, php5.6-json, php-apcu was not included due to error while apt-get install
-      standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode snmp soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
-      additional_packages = %w(amqp ast geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|p| "php-#{p}"}
+      # phpx.x-xsl, phpx.x-json, phpx.x-snmp php-apcu, php-ast was not included due to error while apt-get install
+      standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
+      additional_packages = %w(amqp geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|p| "php-#{p}"}
 
       ( standard_packages + additional_packages ).each do |package|
         it "installs #{package} package" do
           expect(chef_run).to install_package(package)
+        end
+      end
+
+      %W( php#{minor_version}-xsl php#{minor_version}-json php#{minor_version}-cgi php#{minor_version}-snmp php-apcu php-ast php-uploadprogress libapache2-mod-php ).each do |package|
+        it "installs #{package} package" do
+          expect(chef_run).not_to install_package(package)
         end
       end
 
@@ -71,7 +77,7 @@ describe 'w_apache::php_package' do
       end
 
       it 'creates php.ini file and generic fpm config file' do
-        expect(chef_run).to include_recipe('php::ini')
+        expect(chef_run).to create_template("/etc/php/#{minor_version}/cli/php.ini").with(source: 'php.ini.erb', owner: 'root', group: 'root', mode: '0644')
         expect(chef_run).to create_template("/etc/php/#{minor_version}/fpm/php.ini").with(source: 'php.ini.erb', owner: 'root', group: 'root', mode: '0644')
         expect(chef_run).to create_template("/etc/php/#{minor_version}/fpm/php-fpm.conf").with(source: 'php-fpm.conf.erb', owner: 'root', group: 'root', mode: 00644)
       end
