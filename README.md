@@ -21,16 +21,17 @@ Cookbook Dependency:
 * sudo
 * timezone-ii
 * apache2 ~> 3.1.0
-* php  https://github.com/joelhandwell/chef-php
-* php-fpm  https://github.com/yevgenko/cookbook-php-fpm
+* php
 * xdebug  https://github.com/joelhandwell/xdebug
 * phpmyadmin  https://github.com/priestjim/chef-phpmyadmin
 * nfs
 * cron
+* newrelic
+* blackfire
 * haproxy  https://github.com/fulloflilies/haproxy
 
 Supported Platform:
-Ubuntu 14.04, Ubuntu 12.04
+Ubuntu 14.04
 
 Usage
 -----
