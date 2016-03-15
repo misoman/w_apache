@@ -7,18 +7,23 @@ default['apache']['default_modules'] = %w(
   authz_host authz_user autoindex dir env mime negotiation setenvif actions fastcgi expires cache
 )
 
+default['php']['install_method'] = 'package'
 default['php']['version'] = '5.6.18'
 default['php']['checksum'] = '76da4150dc2da86b7b63b1aad3c20d1d11964796251ac0dd4d26d0a3f5045015'
-default['php']['packages']      = %w( php5-cgi php5 php5-dev php5-cli php-pear php5-mysql php5-memcached php5-gd php5-pspell php5-curl )
-default['php']['install_method'] = 'package'
 
-default['php']['conf_dir'] = '/etc/php5/fpm'
-default['php']['ext_conf_dir']  = '/etc/php5/fpm/conf.d'
-default['php']['apache_conf_dir'] = '/etc/php5/apache2'
-default['php']['cgi_conf_dir']  = '/etc/php5/cgi'
+minor_version = node['php']['version'].split('.').first(2).join('.')
+
+standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode soap sqlite3 sybase tidy xmlrpc xml zip).map {|package| "php#{minor_version}-#{package}"}
+additional_packages = %w(amqp geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|package| "php-#{package}"} # apcu, uploadprogress was removed beause it was not installed properly
+
+default['php']['packages'] = standard_packages + additional_packages
+default['php']['conf_dir'] = "/etc/php/#{minor_version}/fpm"
+default['php']['ext_conf_dir']  = "#{node['php']['conf_dir']}/conf.d"
+default['php']['apache_conf_dir'] = "/etc/php/#{minor_version}/apache2"
+default['php']['cli_conf_dir']  = "/etc/php/#{minor_version}/cli"
 default['php']['pear_dir']      = '/usr/share/php'
-default['php']['session_dir']   = '/var/lib/php5/session5'
-default['php']['upload_dir']    = '/var/lib/php5/uploads'
+default['php']['session_dir']   = '/var/lib/php/session'
+default['php']['upload_dir']    = '/var/lib/php/uploads'
 
 default['php']['configure_options'] = %W(--with-gmp
                                          --prefix=#{default['php']['prefix_dir']}
@@ -87,18 +92,34 @@ default['php']['ini_settings'] = {
 default['php']['ini_settings']['session.cookie_domain'] = '.' + node['w_common']['web_apps'][0]['vhost']['main_domain']
 default['php']['directives'] = {}
 
-default['php']['fpm_pool_dir']  = '/etc/php5/fpm/pool.d'
-default['php']['fpm_log_dir']   = '/var/log/php5-fpm'
-default['php']['fpm_pidfile']   = '/var/run/php5-fpm.pid'
-default['php']['fpm_logfile']   = '/var/log/php5-fpm/fpm-master.log'
-default['php']['fpm_rotfile']   = '/etc/logrotate.d/php5-fpm'
+default['php']['fpm_pooldir']  = "/etc/php/#{minor_version}/fpm/pool.d"
+default['php']['fpm_default_conf']  = "/etc/php/#{minor_version}/fpm/pool.d/www.conf"
+default['php']['fpm_pidfile']   = "/var/run/php/php#{minor_version}-fpm.pid"
+default['php']['fpm_logfile']   = "/var/log/php#{minor_version}-fpm.log"
+default['php']['fpm_rotfile']   = "/etc/logrotate.d/php#{minor_version}-fpm"
+default['php']['fpm_package']   = "php#{minor_version}-fpm"
+default['php']['fpm_service']   = "php#{minor_version}-fpm"
+default['php']['fpm_conf']['syslog_facility']      = 'daemon'
+default['php']['fpm_conf']['syslog_ident']      = 'php-fpm'
+default['php']['fpm_conf']['log_level']      = 'notice'
+default['php']['fpm_conf']['emergency_restart_threshold']      = '0'
+default['php']['fpm_conf']['emergency_restart_interval']      = '0'
+default['php']['fpm_conf']['process_control_timeout']      = '0'
+default['php']['fpm_conf']['process_max']      = '0'
+default['php']['fpm_conf']['process_priority']      = nil
+default['php']['fpm_conf']['daemonize']      = 'yes'
+default['php']['fpm_conf']['rlimit_files']      = '1024'
+default['php']['fpm_conf']['rlimit_core']      = '0'
+default['php']['fpm_conf']['events_mechanism']      = 'epoll'
+default['php']['fpm_conf']['systemd_interval']      = '10'
+
 default['w_memcached']['ips'] = ['127.0.0.1']
 default['php']['session_dir'] = node['w_memcached']['ips'].join(':11211,') + ':11211'
 default['php']['mysql_module_edition'] = 'mysql'
 
-default['xdebug']['config_file'] = '/etc/php5/mods-available/xdebug.ini'
+default['xdebug']['config_file'] = "/etc/php/#{minor_version}/mods-available/xdebug.ini"
 default['xdebug']['execute_php5enmod'] = true
-default['xdebug']['web_server']['service_name'] = 'php5-fpm'
+default['xdebug']['web_server']['service_name'] = node['php']['fpm_service']
 default['xdebug']['directives'] = {
   'remote_enable' => 'on',
   'idekey' => 'vagrant',
@@ -112,10 +133,11 @@ default['w_apache']['varnish_enabled'] = true
 default['w_apache']['deploy']['enabled'] = false
 default['w_apache']['newrelic_app_enabled'] = false
 default['w_apache']['newrelic']['app_name'] = 'PHP Application'
+
 default['w_apache']['blackfire_enabled'] = false
 default['w_apache']['composer_enabled'] = false
 default['w_apache']['install_mysql_client'] = true
-default['blackfire']['php']['ini_path'] = '/etc/php5/fpm/conf.d/blackfire.ini'
+default['blackfire']['php']['ini_path'] = "/etc/php/#{minor_version}/mods-available/blackfire.ini"
 default['w_apache']['ssl_enabled'] = false
 default['w_apache']['phpmyadmin']['enabled'] = false
 
