@@ -39,8 +39,8 @@ describe 'w_apache::php_package' do
       end
 
       # php5.6-xsl, php5.6-json, php-apcu was not included due to error while apt-get install
-      standard_packages = %w(bcmath bz2 cgi cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode snmp soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
-      additional_packages = %w(amqp ast geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uploadprogress uuid yac zmq).map {|p| "php-#{p}"}
+      standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode snmp soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
+      additional_packages = %w(amqp ast geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|p| "php-#{p}"}
 
       ( standard_packages + additional_packages ).each do |package|
         it "installs #{package} package" do

@@ -13,8 +13,8 @@ default['php']['checksum'] = '76da4150dc2da86b7b63b1aad3c20d1d11964796251ac0dd4d
 
 minor_version = node['php']['version'].split('.').first(2).join('.')
 
-standard_packages = %w(bcmath bz2 cgi cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode snmp soap sqlite3 sybase tidy xmlrpc xml zip).map {|package| "php#{minor_version}-#{package}"}
-additional_packages = %w(amqp ast geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uploadprogress uuid yac zmq).map {|package| "php-#{package}"} # apcu was removed beause it was not installed properly
+standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode snmp soap sqlite3 sybase tidy xmlrpc xml zip).map {|package| "php#{minor_version}-#{package}"}
+additional_packages = %w(amqp ast geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|package| "php-#{package}"} # apcu, uploadprogress was removed beause it was not installed properly
 
 default['php']['packages'] = standard_packages + additional_packages
 default['php']['conf_dir'] = "/etc/php/#{minor_version}/fpm"
