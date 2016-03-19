@@ -8,7 +8,7 @@ default['apache']['default_modules'] = %w(
 )
 
 default['php']['install_method'] = 'package'
-default['php']['version'] = '5.6.18'
+default['php']['version'] = '7.0.3' # or 5.6.18 etc
 default['php']['checksum'] = '76da4150dc2da86b7b63b1aad3c20d1d11964796251ac0dd4d26d0a3f5045015'
 
 minor_version = node['php']['version'].split('.').first(2).join('.')
