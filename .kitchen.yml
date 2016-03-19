@@ -22,16 +22,16 @@ platforms:
   #- name: ubuntu-12.04
 
 suites:
-  - name: php5_package
+  - name: php7_package
     run_list:
       - role[w_common_role]
       - role[w_apache_role]
-  - name: php7_package
+  - name: php5_package
     run_list:
       - role[w_common_role]
       - role[w_apache_role]
     attributes: {
       "php": {
-        "version": "7.0.3"
+        "version": "5.6.18"
       }
     }
