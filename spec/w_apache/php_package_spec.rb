@@ -38,8 +38,7 @@ describe 'w_apache::php_package' do
         expect(chef_run).to update_php_pear_channel('pecl.php.net')
       end
 
-      # phpx.x-xsl, phpx.x-json, phpx.x-snmp php-apcu, php-ast was not included due to error while apt-get install
-      standard_packages = %w(bcmath bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
+      standard_packages = %w(bz2 cli common curl dev enchant gd gmp imap interbase intl ldap mbstring mcrypt mysql odbc opcache pgsql phpdbg pspell readline recode soap sqlite3 sybase tidy xml xmlrpc zip).map {|p| "php#{minor_version}-#{p}"}
       additional_packages = %w(amqp geoip gettext gmagick igbinary imagick mailparse memcached mongodb msgpack pear radius redis rrd smbclient ssh2 uuid yac zmq).map {|p| "php-#{p}"}
 
       ( standard_packages + additional_packages ).each do |package|
@@ -48,7 +47,7 @@ describe 'w_apache::php_package' do
         end
       end
 
-      %W( php#{minor_version}-xsl php#{minor_version}-json php#{minor_version}-cgi php#{minor_version}-snmp php-apcu php-ast php-uploadprogress libapache2-mod-php ).each do |package|
+      %W( php#{minor_version}-bcmath php#{minor_version}-xsl php#{minor_version}-json php#{minor_version}-cgi php#{minor_version}-snmp php-apcu php-ast php-uploadprogress libapache2-mod-php ).each do |package|
         it "installs #{package} package" do
           expect(chef_run).not_to install_package(package)
         end
