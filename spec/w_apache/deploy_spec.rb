@@ -52,11 +52,10 @@ describe 'w_apache::deploy' do
       expect(chef_run).to run_execute('add and delete jenkins_pub for www-data')
     end
 
-    it 'make sure ownership of /websites/example.com' do
-      expect(chef_run).to run_execute('chown -R www-data.www-data /websites/example.com')
-      expect(chef_run).to run_execute('chown -R www-data.www-data /websites/example2.com')
-      expect(chef_run).to run_execute('chown -R www-data.www-data /websites/multi-repo-vhost.com')
-      expect(chef_run).to run_execute('chown -R www-data.www-data /websites/multi-repo-vhost.com/repo2')
+    %w( example.com example2.com multi-repo-vhost.com multi-repo-vhost.com/repo2 ).each do |dir|
+      it 'make sure ownership of /websites/example.com' do
+        expect(chef_run).to create_directory("make sure ownership and existance of /websites/#{dir}").with(path: "/websites/#{dir}", user: 'www-data', group: 'www-data', recursive: true)
+      end
     end
 
     it 'runs a execute git init for www' do

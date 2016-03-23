@@ -73,8 +73,11 @@ node['w_common']['web_apps'].each do |web_app|
     dir = repo['repo_path']
     url = repo['repo_url']
 
-    execute "make sure ownership of #{dir}" do
-      command "chown -R www-data.www-data #{dir}"
+    directory "make sure ownership and existance of #{dir}" do
+      path dir
+      owner 'www-data'
+      group 'www-data'
+      recursive true
     end
 
     execute "git init for #{url}" do
