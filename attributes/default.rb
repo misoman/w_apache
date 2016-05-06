@@ -131,6 +131,7 @@ default['xdebug']['directives'] = {
 default['w_apache']['xdebug_enabled'] = false
 default['w_apache']['varnish_enabled'] = true
 default['w_apache']['deploy']['enabled'] = false
+default['w_apache']['deploy']['enable_repo_hostsfile'] = true
 default['w_apache']['newrelic_app_enabled'] = false
 default['w_apache']['newrelic']['app_name'] = 'PHP Application'
 

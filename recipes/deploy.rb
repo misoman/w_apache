@@ -67,6 +67,7 @@ node['w_common']['web_apps'].each do |web_app|
         hostname repo_domain
         action :append
         unique true
+        only_if { node['w_apache']['deploy']['enable_repo_hostsfile'] }
       end
     end
 
