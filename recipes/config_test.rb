@@ -1,6 +1,7 @@
 node['w_common']['web_apps'].each do |web_app|
 
   next if web_app['vhost'].has_key?('create_docroot_dir') && web_app['vhost']['create_docroot_dir'] == false
+  next if web_app.has_key?('deploy') && !web_app['deploy'].instance_of?(Chef::Node::ImmutableArray) && web_app['deploy'].has_key?('checkout_ref')
 
   if web_app.has_key?('mysql') and web_app.has_key?('connection_domain') then
 
