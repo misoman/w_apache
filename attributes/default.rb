@@ -128,6 +128,7 @@ default['xdebug']['directives'] = {
   'remote_host' => '192.168.33.1',
   'remote_port' => '9000'
   }
+default['w_apache']['config_test_enabled'] = false
 default['w_apache']['xdebug_enabled'] = false
 default['w_apache']['varnish_enabled'] = true
 default['w_apache']['deploy']['enabled'] = false

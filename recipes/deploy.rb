@@ -81,19 +81,32 @@ node['w_common']['web_apps'].each do |web_app|
       recursive true
     end
 
-    execute "git init for #{url}" do
-      cwd dir
-      command 'git init'
-      user 'www-data'
-      group 'www-data'
-      creates "#{dir}/.git/HEAD"
-    end
+    if repo.has_key?('checkout_ref') then
 
-    execute "git remote add origin #{url}" do
-      cwd dir
-      user 'www-data'
-      group 'www-data'
-      not_if "cat #{dir}/.git/config | grep #{url}"
+      git dir do
+        repository url
+        revision repo['checkout_ref']
+        enable_checkout false
+        user 'www-data'
+        group 'www-data'
+        action :checkout
+      end
+    else
+
+      execute "git init for #{url}" do
+        cwd dir
+        command 'git init'
+        user 'www-data'
+        group 'www-data'
+        creates "#{dir}/.git/HEAD"
+      end
+
+      execute "git remote add origin #{url}" do
+        cwd dir
+        user 'www-data'
+        group 'www-data'
+        not_if "cat #{dir}/.git/config | grep #{url}"
+      end
     end
   end
 end
