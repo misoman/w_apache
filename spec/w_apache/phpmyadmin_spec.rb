@@ -33,7 +33,7 @@ describe 'w_apache::phpmyadmin' do
 
     it 'reloads apache after updating phpmyadmin.conf' do
       conf_template = chef_run.template('/etc/apache2/conf-available/phpmyadmin.conf')
-      expect(conf_template).to notify('service[apache2]').to(:reload).delayed
+      expect(conf_template).to notify('service[apache2]').to(:restart).delayed
     end
 
     it 'installs apache2-utils' do
