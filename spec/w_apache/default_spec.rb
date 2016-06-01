@@ -30,6 +30,7 @@ describe 'w_apache::default' do
 
         it 'runs recipe apache2' do
           expect(chef_run).to include_recipe('apache2')
+          expect(chef_run).to render_file('/etc/apache2/apache2.conf').with_content(/LogLevel error/)
         end
 
         it 'creates fastcgi.conf file from w_apache/templates/default/fastcgi.conf.erb' do
