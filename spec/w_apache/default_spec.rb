@@ -12,7 +12,7 @@ describe 'w_apache::default' do
         stub_command("/usr/sbin/apache2 -t").and_return(true)
       end
 
-      context 'with Ubintu 14.04 trusty' do
+      context 'with Ubuntu 14.04 trusty' do
         let(:chef_run) do
           ChefSpec::SoloRunner.new do |node|
             node.set['w_memcached']['ips'] = ['127.0.0.1']
@@ -52,9 +52,9 @@ describe 'w_apache::default' do
           expect(chef_run).to install_firewall('default')
         end
 
-        [80].each do |listen_port|
+        [80, 443].each do |listen_port|
           it "runs resoruce firewall_rule to open port #{listen_port}" do
-            expect(chef_run).to create_firewall_rule('http').with(port: listen_port, protocol: :tcp)
+            expect(chef_run).to create_firewall_rule("apache listen port #{listen_port}").with(port: listen_port, protocol: :tcp)
           end
         end
 
