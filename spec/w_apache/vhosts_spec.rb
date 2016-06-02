@@ -69,11 +69,17 @@ describe 'w_apache::vhosts' do
       end
 
       it 'has directory index index.html index.htm index.php' do
-        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('DirectoryIndex index.html index.htm index.php')
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('DirectoryIndex index.html index.htm index.php')
       end
 
       it 'overwrites the Log setting' do
-        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('AllowOverride All')
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('AllowOverride All')
+      end
+    end
+
+    describe '/etc/apache2/sites-available/custom-template-vhost.com.conf' do
+      it 'is created' do
+        expect(chef_run).to create_template('/etc/apache2/sites-available/custom-template-vhost.com.conf')
       end
     end
   end

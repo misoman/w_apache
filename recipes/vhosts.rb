@@ -14,8 +14,8 @@ node['w_common']['web_apps'].each do |web_app|
     server_name vhost['main_domain']
     server_aliases vhost['aliases']
     docroot vhost['docroot']
-    cookbook 'w_apache'
-    template 'w_apache_web_app.conf.erb'
+    cookbook vhost.has_key?('tpl_cookbook') ? vhost['tpl_cookbook'] : 'w_apache'
+    template vhost.has_key?('tpl_source') ? vhost['tpl_source'] : 'w_apache_web_app.conf.erb'
     allow_override 'All'
     directory_index ["index.html", "index.htm", "index.php"]
   end
