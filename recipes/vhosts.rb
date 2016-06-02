@@ -7,7 +7,7 @@ node['w_common']['web_apps'].each do |web_app|
     owner 'www-data'
     group 'www-data'
     recursive true
-    not_if { web_app['vhost'].has_key?('create_docroot_dir') && web_app['vhost']['create_docroot_dir'] == false }
+    not_if { vhost.has_key?('create_docroot_dir') && vhost['create_docroot_dir'] == false }
   end
 
   web_app vhost['main_domain'] do
@@ -18,5 +18,6 @@ node['w_common']['web_apps'].each do |web_app|
     template vhost.has_key?('tpl_source') ? vhost['tpl_source'] : 'w_apache_web_app.conf.erb'
     allow_override 'All'
     directory_index ["index.html", "index.htm", "index.php"]
+    log_level vhost.has_key?('log_level') ? vhost['log_level'] : 'error'
   end
 end
