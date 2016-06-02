@@ -15,7 +15,6 @@ describe 'w_apache::phpmyadmin' do
         node.automatic['memory']['total'] = '4049656kB'
         node.automatic['memory']['swap']['total'] = '1024kB'
         node.set['w_common']['web_apps'] = web_apps
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
 

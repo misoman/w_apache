@@ -11,7 +11,6 @@ describe 'w_apache::newrelic_app' do
       let(:chef_run) do
         ChefSpec::SoloRunner.new do |node|
           node.set['w_common']['web_apps'] = web_apps
-          node.set['w_memcached']['ips'] = ['127.0.0.1']
           node.set['w_apache']['newrelic_app_enabled'] = true
           node.set['php']['version'] = version[:full]
         end.converge(described_recipe)

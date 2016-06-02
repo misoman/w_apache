@@ -6,7 +6,6 @@ describe 'w_apache::ssl' do
     ChefSpec::SoloRunner.new do |node|
       node.set['w_common']['web_apps'] = web_apps
       node.set['w_apache']['deploy']['enabled'] = true
-      node.set['w_memcached']['ips'] = ['127.0.0.1']
       node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
       node.set['w_apache']['ssl_enabled'] = true
     end.converge(described_recipe)
