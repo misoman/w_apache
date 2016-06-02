@@ -4,6 +4,7 @@ default['apache']['pid_file'] = '/var/run/apache2/apache2.pid'
 default['apache']['docroot_dir'] = '/var/www/html'
 default['apache']['listen'] = ['*:80', '*:443']
 default['apache']['log_level'] = 'error'
+default['apache']['access_file_name'] = '.htaccess'
 default['apache']['default_modules'] = %w(
   status alias auth_basic authn_core authn_file authz_core authz_groupfile
   authz_host authz_user autoindex dir env mime negotiation setenvif actions fastcgi expires cache
