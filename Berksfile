@@ -12,7 +12,7 @@ cookbook 'ntp'
 cookbook 'sudo'
 cookbook 'timezone-ii'
 
-cookbook 'apache2', '~> 3.1.0'
+cookbook 'apache2', git: 'https://github.com/joelhandwell/chef-apache2', branch: 'loglevel'
 cookbook 'php', '~> 1.8.0'
 cookbook 'xdebug', git: 'https://github.com/joelhandwell/xdebug.git', ref: 'c336a7b4abbc5cf66bf68e29c7d293d584e001a6'
 cookbook 'phpmyadmin', git: 'https://github.com/priestjim/chef-phpmyadmin.git', ref: 'dbc38b6878b60e159679a438acf08e1adfa019b6'

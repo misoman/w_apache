@@ -15,7 +15,6 @@ describe 'w_apache::phpmyadmin' do
         node.automatic['memory']['total'] = '4049656kB'
         node.automatic['memory']['swap']['total'] = '1024kB'
         node.set['w_common']['web_apps'] = web_apps
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
 
@@ -31,9 +30,9 @@ describe 'w_apache::phpmyadmin' do
       expect(chef_run).to render_file('/etc/apache2/conf-available/phpmyadmin.conf')
     end
 
-    it 'reloads apache after updating phpmyadmin.conf' do
+    it 'restarts apache after updating phpmyadmin.conf' do
       conf_template = chef_run.template('/etc/apache2/conf-available/phpmyadmin.conf')
-      expect(conf_template).to notify('service[apache2]').to(:reload).delayed
+      expect(conf_template).to notify('service[apache2]').to(:restart).delayed
     end
 
     it 'installs apache2-utils' do

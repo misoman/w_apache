@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
-gem 'chef', '~> 12.7.1'
+gem 'chef', '~> 12.10.24'
 gem 'chefspec'
 gem 'chef-zero'
-gem 'berkshelf', '~> 4.2.0'
+gem 'berkshelf', '~> 4.3.3'
 gem 'foodcritic'
 gem 'rake'
 gem 'coveralls', require: false
@@ -12,6 +12,5 @@ group :integration do
   gem 'serverspec'
   gem 'kitchen-vagrant'
   gem 'vagrant-wrapper'
-  gem 'kitchen-sync'
-  gem 'test-kitchen', '~> 1.5.0'
+  gem 'test-kitchen', '~> 1.8.0'
 end

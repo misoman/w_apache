@@ -6,7 +6,6 @@ describe 'w_apache::vhosts' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_common']['web_apps'] = web_apps
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
 
@@ -14,19 +13,17 @@ describe 'w_apache::vhosts' do
       stub_command("/usr/sbin/apache2 -t").and_return(true)
     end
 
-    it 'creates document root directory' do
-      expect(chef_run).to create_directory('document root for example.com'                      ).with(path: '/websites/example.com/www'         , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for example2.com'                     ).with(path: '/websites/example2.com/sub'        , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for example3.com'                     ).with(path: '/websites/example3.com/sub'        , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for docroot-only-vhost.com'           ).with(path: '/websites/dov'                     , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).not_to create_directory('document root for docroot-create-disable.com'   ).with(path: '/websites/dcd'                     , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for multi-repo-vhost.com'             ).with(path: '/websites/multi-repo-vhost'        , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for ssl.example.com'                  ).with(path: '/websites/example.com/ssl'         , owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for ssl-disabled.example.com'         ).with(path: '/websites/example.com/ssl_disabled', owner: 'www-data', group: 'www-data', recursive: true)
-      expect(chef_run).to create_directory('document root for ssl-without-intermediate-cert.com').with(path: '/websites/ssl-website-wic.com'     , owner: 'www-data', group: 'www-data', recursive: true)
+    web_apps.each do |web_app|
+      vhost = web_app[:vhost]
+      next if vhost[:main_domain] == 'docroot-create-disable.com'
+
+      it 'creates document root directory' do
+        expect(chef_run).to create_directory("document root for #{vhost[:main_domain]}").with(path: vhost[:docroot], owner: 'www-data', group: 'www-data', recursive: true)
+      end
     end
 
-    it 'creates directory /websites/example2.com/sub' do
+    it 'does not creates document root directory when specified' do
+      expect(chef_run).not_to create_directory('document root for docroot-create-disable.com').with(path: '/websites/dcd', owner: 'www-data', group: 'www-data', recursive: true)
     end
 
     describe '/etc/apache2/sites-available/example.com.conf' do
@@ -53,6 +50,10 @@ describe 'w_apache::vhosts' do
       it 'overwrites the Log setting' do
         expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('AllowOverride All')
       end
+
+      it 'sets the default log level' do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('LogLevel error')
+      end
     end
 
     describe '/etc/apache2/sites-available/example2.com.conf' do
@@ -69,11 +70,21 @@ describe 'w_apache::vhosts' do
       end
 
       it 'has directory index index.html index.htm index.php' do
-        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('DirectoryIndex index.html index.htm index.php')
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('DirectoryIndex index.html index.htm index.php')
       end
 
       it 'overwrites the Log setting' do
-        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('AllowOverride All')
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('AllowOverride All')
+      end
+
+      it 'sets the default log level' do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example2.com.conf').with_content('LogLevel info')
+      end
+    end
+
+    describe '/etc/apache2/sites-available/custom-template-vhost.com.conf' do
+      it 'is created' do
+        expect(chef_run).to create_template('/etc/apache2/sites-available/custom-template-vhost.com.conf')
       end
     end
   end

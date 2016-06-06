@@ -20,7 +20,6 @@ describe 'w_apache::deploy' do
       ChefSpec::SoloRunner.new do |node|
         node.set['w_common']['web_apps'] = web_apps
         node.set['w_apache']['deploy']['enabled'] = true
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
 

@@ -38,8 +38,10 @@ include_recipe 'w_apache::vhosts'
 
 firewall 'default'
 
-node['apache']['listen_ports'].each do |listen_port|
-	firewall_rule 'http' do
+listen_ports = node['apache']['listen'].map{ |l| l.split(':').last }.uniq
+
+listen_ports.each do |listen_port|
+	firewall_rule "apache listen port #{listen_port}" do
 	  port     listen_port.to_i
 	  protocol :tcp
 	end

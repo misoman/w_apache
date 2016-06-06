@@ -12,10 +12,9 @@ describe 'w_apache::default' do
         stub_command("/usr/sbin/apache2 -t").and_return(true)
       end
 
-      context 'with Ubintu 14.04 trusty' do
+      context 'with Ubuntu 14.04 trusty' do
         let(:chef_run) do
           ChefSpec::SoloRunner.new do |node|
-            node.set['w_memcached']['ips'] = ['127.0.0.1']
             node.set['w_common']['web_apps'] = web_apps
             node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
             node.set['php']['version'] = version[:full]
@@ -30,6 +29,7 @@ describe 'w_apache::default' do
 
         it 'runs recipe apache2' do
           expect(chef_run).to include_recipe('apache2')
+          expect(chef_run).to render_file('/etc/apache2/apache2.conf').with_content(/LogLevel error/)
         end
 
         it 'creates fastcgi.conf file from w_apache/templates/default/fastcgi.conf.erb' do
@@ -52,9 +52,9 @@ describe 'w_apache::default' do
           expect(chef_run).to install_firewall('default')
         end
 
-        [80].each do |listen_port|
+        [80, 443].each do |listen_port|
           it "runs resoruce firewall_rule to open port #{listen_port}" do
-            expect(chef_run).to create_firewall_rule('http').with(port: listen_port, protocol: :tcp)
+            expect(chef_run).to create_firewall_rule("apache listen port #{listen_port}").with(port: listen_port, protocol: :tcp)
           end
         end
 

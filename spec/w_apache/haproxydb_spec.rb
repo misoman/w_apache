@@ -5,9 +5,8 @@ describe 'w_apache::haproxydb' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
   			node.set['w_common']['web_apps'] = web_apps
-  			node.set['w_memcached']['ips'] = ['127.0.0.1']
-      end.converge(described_recipe)
-    end
+    end.converge(described_recipe)
+  end
 
   it 'runs recipe haproxy::manual' do
     expect(chef_run).to include_recipe('haproxy::manual')
