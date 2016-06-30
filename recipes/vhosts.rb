@@ -12,6 +12,7 @@ node['w_common']['web_apps'].each do |web_app|
 
   web_app vhost['main_domain'] do
     server_name vhost['main_domain']
+    server_port node['apache']['listen'].first.split(':').last
     server_aliases vhost['aliases']
     docroot vhost['docroot']
     cookbook vhost.has_key?('tpl_cookbook') ? vhost['tpl_cookbook'] : 'w_apache'

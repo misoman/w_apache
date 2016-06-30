@@ -31,6 +31,10 @@ describe 'w_apache::vhosts' do
         expect(chef_run).to create_template('/etc/apache2/sites-available/example.com.conf')
       end
 
+      it 'has default port' do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content(/VirtualHost \*:80/)
+      end
+
       it 'has vhost example.com' do
         expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content('ServerName example.com')
       end
@@ -85,6 +89,25 @@ describe 'w_apache::vhosts' do
     describe '/etc/apache2/sites-available/custom-template-vhost.com.conf' do
       it 'is created' do
         expect(chef_run).to create_template('/etc/apache2/sites-available/custom-template-vhost.com.conf')
+      end
+    end
+  end
+
+  context 'with custom server port' do
+    let(:chef_run) do
+      ChefSpec::SoloRunner.new do |node|
+        node.set['w_common']['web_apps'] = web_apps
+        node.set['apache']['listen'] = ['*:8888', '*:8433']
+      end.converge(described_recipe)
+    end
+
+    before do
+      stub_command("/usr/sbin/apache2 -t").and_return(true)
+    end
+
+    describe '/etc/apache2/sites-available/example.com.conf' do
+      it 'has custom port' do
+        expect(chef_run).to render_file('/etc/apache2/sites-available/example.com.conf').with_content(/VirtualHost \*:8888/)
       end
     end
   end
