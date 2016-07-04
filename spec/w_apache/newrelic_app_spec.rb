@@ -25,7 +25,7 @@ describe 'w_apache::newrelic_app' do
             license: 'xxxxxxxxxxxxxxxxxxxx',
             app_name: 'PHP Application',
             config_file: "/etc/php/#{minor_version}/mods-available/newrelic.ini",
-            config_file_to_be_deleted: "/etc/php/#{minor_version}/cli/conf.d/newrelic.ini"
+            config_file_to_be_deleted: "/etc/php/#{minor_version}/fpm/conf.d/newrelic.ini"
           )
       end
     end
