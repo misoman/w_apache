@@ -43,9 +43,13 @@ describe 'w_apache::default' do
           }
         end
 
-        it 'runs recipe w_apache::php, and w_apache::vhosts' do
+        it 'runs recipe w_apache::php, php-phalcon and w_apache::vhosts' do
           expect(chef_run).to include_recipe('w_apache::php_package')
           expect(chef_run).to include_recipe('w_apache::vhosts')
+        end
+
+        it 'do not include phalcon recipe by default as not everyone use it' do
+          expect(chef_run).not_to include_recipe('php-phalcon')
         end
 
         it 'enables firewall' do
@@ -60,6 +64,22 @@ describe 'w_apache::default' do
 
         it 'installs mysql client' do
           expect(chef_run).to install_package('mysql-client')
+        end
+      end
+
+      context 'with phalcon enabled' do
+
+        let(:chef_run) do
+          ChefSpec::SoloRunner.new do |node|
+            node.set['w_common']['web_apps'] = web_apps
+            node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
+            node.set['php']['version'] = version[:full]
+            node.set['w_apache']['phalcon_enabled'] = true
+          end.converge(described_recipe)
+        end
+
+        it 'include phalcon recipe if enabled' do
+          expect(chef_run).to include_recipe('php-phalcon')
         end
       end
     end

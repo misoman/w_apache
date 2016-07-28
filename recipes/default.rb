@@ -34,6 +34,7 @@ rescue Chef::Exceptions::ResourceNotFound
 end
 
 include_recipe "w_apache::php_#{node['php']['install_method']}"
+include_recipe 'php-phalcon' if node['w_apache']['phalcon_enabled']
 include_recipe 'w_apache::vhosts'
 
 firewall 'default'
