@@ -16,6 +16,8 @@ node['php']['packages'].each do |pkg|
   end
 end
 
+include_recipe 'php-phalcon' if node['w_apache']['phalcon_enabled']
+
 { doc_dir: '/docs', php_dir: '', cfg_dir: '/cfg', data_dir: '/data', test_dir: '/tests', www_dir: '/www'}.each do |key, value|
   execute "pear config-set #{key} /usr/share/php#{value}"
 end
