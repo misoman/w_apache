@@ -43,7 +43,7 @@ describe 'w_apache::default' do
           }
         end
 
-        it 'runs recipe w_apache::php, and w_apache::vhosts' do
+        it 'runs recipe w_apache::php, php-phalcon and w_apache::vhosts' do
           expect(chef_run).to include_recipe('w_apache::php_package')
           expect(chef_run).to include_recipe('w_apache::vhosts')
         end

@@ -75,7 +75,7 @@ default['php']['ini_settings'] = {
   'open_basedir' => '',
   'max_execution_time' => '300',
   'max_input_time' => '300',
-  'memory_limit' => '128M',
+  'memory_limit' => '512M',
   'error_reporting' => 'E_ALL & ~E_DEPRECATED & ~E_NOTICE',
   'display_errors' => 'Off',
   'error_log' => '',
@@ -139,6 +139,7 @@ default['w_apache']['deploy']['enable_repo_hostsfile'] = true
 default['w_apache']['newrelic_app_enabled'] = false
 default['w_apache']['newrelic']['app_name'] = 'PHP Application'
 
+default['w_apache']['phalcon_enabled'] = false
 default['w_apache']['blackfire_enabled'] = false
 default['w_apache']['composer_enabled'] = false
 default['w_apache']['install_mysql_client'] = true

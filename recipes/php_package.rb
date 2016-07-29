@@ -79,3 +79,5 @@ end
 service node['php']['fpm_service'] do
   action [:start, :enable]
 end
+
+include_recipe 'w_apache::phalcon' if node['w_apache']['phalcon_enabled']

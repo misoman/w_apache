@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-%w( blackfire composer default deploy monit newrelic_app php ssl varnish_integration vhosts ).each do |test|
+%w( blackfire composer default deploy monit newrelic_app php phalcon ssl varnish_integration vhosts ).each do |test|
   require_relative "../w_apache/#{test}_spec.rb"
 
   describe test do
