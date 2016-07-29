@@ -47,10 +47,6 @@ describe 'w_apache::php_package' do
         end
       end
 
-      it 'do not include phalcon recipe by default as not everyone use it' do
-        expect(chef_run).not_to include_recipe('php-phalcon')
-      end
-
       %W( php#{minor_version}-bcmath php#{minor_version}-xsl php#{minor_version}-json php#{minor_version}-cgi php#{minor_version}-snmp php-apcu php-ast php-uploadprogress libapache2-mod-php ).each do |package|
         it "installs #{package} package" do
           expect(chef_run).not_to install_package(package)
@@ -95,9 +91,18 @@ describe 'w_apache::php_package' do
         expect(chef_run).to enable_service("php#{minor_version}-fpm")
         expect(chef_run).to start_service("php#{minor_version}-fpm")
       end
+
+      it 'do not include phalcon recipe by default as not everyone use it' do
+        expect(chef_run).not_to include_recipe('w_apache::phalcon')
+      end
     end
 
     context 'with phalcon enabled' do
+
+      before do
+        stub_command('test -e /usr/local/bin/zephir').and_return(false)
+      end
+
       let(:chef_run) do
         ChefSpec::SoloRunner.new do |node|
           node.set['w_common']['web_apps'] = web_apps
@@ -108,7 +113,7 @@ describe 'w_apache::php_package' do
       end
 
       it 'include phalcon recipe if enabled' do
-        expect(chef_run).to include_recipe('php-phalcon')
+        expect(chef_run).to include_recipe('w_apache::phalcon')
       end
     end
   end

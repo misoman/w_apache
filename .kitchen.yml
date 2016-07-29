@@ -25,6 +25,11 @@ suites:
     run_list:
       - role[w_common_role]
       - role[w_apache_role]
+    attributes: {
+      "w_apache": {
+        "phalcon_enabled": true
+      }
+    }
   - name: php5_package
     run_list:
       - role[w_common_role]
@@ -32,5 +37,8 @@ suites:
     attributes: {
       "php": {
         "version": "5.6.18"
+      },
+      "w_apache": {
+        "phalcon_enabled": true
       }
     }
