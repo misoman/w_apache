@@ -28,6 +28,10 @@ describe 'w_apache::newrelic_app' do
             config_file_to_be_deleted: "/etc/php/#{minor_version}/fpm/conf.d/newrelic.ini"
           )
       end
+
+      it 'deletes duplicated newrelic app config file' do
+        expect(chef_run).to delete_file("/etc/php/#{minor_version}/cli/conf.d/newrelic.ini")
+      end
     end
   end
 end
