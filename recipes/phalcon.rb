@@ -54,7 +54,6 @@ git '/opt/phalcon' do
 end
 
 disabled_functions = node['php']['secure_functions']['disable_functions']
-templorary_enabled_shell_exec = false
 php_cli_ini = "#{node['php']['cli_conf_dir']}/php.ini"
 
 ruby_block 'Temporary enables shell_exec for to successfuly build phalcon' do
@@ -62,9 +61,8 @@ ruby_block 'Temporary enables shell_exec for to successfuly build phalcon' do
     php_ini = Chef::Util::FileEdit.new(php_cli_ini)
     php_ini.search_file_replace_line(/disable_functions.*shell_exec.*/, "disable_functions = #{disabled_functions.sub(',shell_exec,', ',')}")
     php_ini.write_file
-    templorary_enabled_shell_exec = true
   end
-  only_if { disabled_functions.include? 'shell_exec' }
+  only_if { node['php']['secure_functions']['disable_functions'].include? 'shell_exec' }
 end
 
 execute './install' do
@@ -83,7 +81,7 @@ ruby_block 'Disable temporary enabled shell_exec' do
     php_ini.search_file_replace_line(/disable_functions/, "disable_functions = #{disabled_functions}")
     php_ini.write_file
   end
-  only_if { templorary_enabled_shell_exec }
+  only_if { node['php']['secure_functions']['disable_functions'].include? 'shell_exec' }
 end
 
 phalcon_ini = <<-EOT
