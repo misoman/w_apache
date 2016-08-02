@@ -40,8 +40,8 @@ EOT
 
       let(:chef_run) do
         ChefSpec::SoloRunner.new do |node|
-          node.set['w_common']['web_apps'] = web_apps
-          node.set['php']['version'] = version[:full]
+          node.override['w_common']['web_apps'] = web_apps
+          node.override['php']['version'] = version[:full]
         end.converge(described_recipe)
       end
 
@@ -58,6 +58,10 @@ EOT
 
       it 'installs dependency to build phalcon' do
         expect(chef_run).to sync_git('/opt/phalcon').with(repository: 'https://github.com/phalcon/cphalcon.git', revision: phalcon_version)
+      end
+
+      it 'temporary enables shell_exec php function to build phalcon' do
+        expect(chef_run).to run_ruby_block('Temporary enables shell_exec for to successfuly build phalcon')
       end
 
       if minor_version.to_f <= 5.6 then
@@ -79,6 +83,10 @@ EOT
         it 'runs phalcon install script for php 7' do
           expect(chef_run).to run_execute('zephir build -backend=ZendEngine3').with(cwd: '/opt/phalcon')
         end
+      end
+
+      it 'disable temporary enabled shell_exec' do
+        expect(chef_run).to run_ruby_block('Disable temporary enabled shell_exec')
       end
 
       it 'create phalcon php module config file' do

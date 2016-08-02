@@ -53,6 +53,18 @@ git '/opt/phalcon' do
   revision phalcon_version
 end
 
+disabled_functions = node['php']['secure_functions']['disable_functions']
+php_cli_ini = "#{node['php']['cli_conf_dir']}/php.ini"
+
+ruby_block 'Temporary enables shell_exec for to successfuly build phalcon' do
+  block do
+    php_ini = Chef::Util::FileEdit.new(php_cli_ini)
+    php_ini.search_file_replace_line(/disable_functions.*shell_exec.*/, "disable_functions = #{disabled_functions.sub(',shell_exec,', ',')}")
+    php_ini.write_file
+  end
+  only_if { node['php']['secure_functions']['disable_functions'].include? 'shell_exec' }
+end
+
 execute './install' do
   cwd '/opt/phalcon/build'
   only_if { minor_version.to_f <= 5.6 }
@@ -61,6 +73,15 @@ end
 execute 'zephir build -backend=ZendEngine3' do
   cwd '/opt/phalcon'
   only_if { minor_version.to_f >= 7 }
+end
+
+ruby_block 'Disable temporary enabled shell_exec' do
+  block do
+    php_ini = Chef::Util::FileEdit.new(php_cli_ini)
+    php_ini.search_file_replace_line(/disable_functions/, "disable_functions = #{disabled_functions}")
+    php_ini.write_file
+  end
+  only_if { node['php']['secure_functions']['disable_functions'].include? 'shell_exec' }
 end
 
 phalcon_ini = <<-EOT
