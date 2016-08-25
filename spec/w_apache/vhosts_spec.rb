@@ -5,7 +5,7 @@ describe 'w_apache::vhosts' do
 
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
+        node.normal['w_common']['web_apps'] = web_apps
       end.converge(described_recipe)
     end
 
@@ -96,8 +96,8 @@ describe 'w_apache::vhosts' do
   context 'with custom server port' do
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
-        node.set['apache']['listen'] = ['*:8888', '*:8433']
+        node.normal['w_common']['web_apps'] = web_apps
+        node.normal['apache']['listen'] = ['*:8888', '*:8433']
       end.converge(described_recipe)
     end
 

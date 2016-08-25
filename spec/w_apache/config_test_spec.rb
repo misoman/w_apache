@@ -11,7 +11,7 @@ describe 'w_apache::config_test' do
 
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
+        node.normal['w_common']['web_apps'] = web_apps
       end.converge(described_recipe)
     end
 

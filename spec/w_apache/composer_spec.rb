@@ -3,10 +3,10 @@ require_relative '../spec_helper'
 describe 'w_apache::composer' do
   let(:chef_run) do
     ChefSpec::SoloRunner.new do |node|
-      node.set['w_common']['web_apps'] = web_apps
+      node.normal['w_common']['web_apps'] = web_apps
       node.automatic['memory']['total'] = '4049656kB'
       node.automatic['memory']['swap']['total'] = '1024kB'
-      node.set['w_apache']['composer_enabled'] = true
+      node.normal['w_apache']['composer_enabled'] = true
     end.converge(described_recipe)
   end
 
