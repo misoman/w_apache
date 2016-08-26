@@ -14,7 +14,7 @@ describe 'w_apache::phpmyadmin' do
       ChefSpec::SoloRunner.new do |node|
         node.automatic['memory']['total'] = '4049656kB'
         node.automatic['memory']['swap']['total'] = '1024kB'
-        node.set['w_common']['web_apps'] = web_apps
+        node.normal['w_common']['web_apps'] = web_apps
       end.converge(described_recipe)
     end
 

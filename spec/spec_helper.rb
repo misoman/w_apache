@@ -25,6 +25,7 @@ end
 RSpec.configure do |config|
   config.platform = 'ubuntu'
   config.version = '14.04'
+  config.log_level = :error
 end
 
 def web_apps
@@ -33,11 +34,12 @@ def web_apps
     { vhost: { main_domain: 'example2.com',                                        docroot: '/websites/example2.com/sub', log_level: 'info' }, deploy: { repo_ip: '9.9.9.9', repo_domain: 'git.examplewebsite.com', repo_path: '/websites/example2.com', repo_url: 'https://git.examplewebsite.com/www2.git' } , connection_domain: { webapp_domain: 'webapp.example.com', db_domain: 'db.example.com'                                        }, mysql: [ { db: ['db2', 'db3', 'db4'], user: 'user', password: 'password' }]                                   },
     { vhost: { main_domain: 'example3.com',                                        docroot: '/websites/example3.com/sub'                    }                                                                                                                                                                    , connection_domain: { webapp_domain: 'webapp.example.com', db_domain: 'db.example.com'                                        }, mysql: [ { db: ['db2', 'db3', 'db4'], user: 'user', password: 'password' }]                                   },
     { vhost: { main_domain: 'docroot-only-vhost.com',                              docroot: '/websites/dov'                                 }},
-    { vhost: { main_domain: 'custom-template-vhost.com',                           docroot: '/websites/ctv', tpl_cookbook: 'a_cookbook', tpl_source: 'a_template' }},
+    { vhost: { main_domain: 'custom-template-vhost.com',                           docroot: '/websites/ctv', tpl_cookbook: 'custom_tmpl_cookbook', tpl_source: 'custom_vhost_template.erb' }},
     { vhost: { main_domain: 'docroot-create-disable.com',                          docroot: '/websites/dcd',  create_docroot_dir: false }},
     { vhost: { main_domain: 'multi-repo-vhost.com',                                docroot: '/websites/multi-repo-vhost'                    }, deploy: [{ repo_path: '/websites/multi-repo-vhost', repo_url: 'https://git.examplewebsite.com/multi-repo-vhost.com-repo1.git' }, { repo_path: '/websites/multi-repo-vhost/repo2', repo_url: 'https://git.examplewebsite.com/multi-repo-vhost.com-repo2.git' }]  },
     { vhost: { main_domain: 'checkout-repo-vhost.com',                             docroot: '/websites/checkout-repo-vhost'                 }, deploy: { repo_path: '/websites/checkout-repo-vhost', repo_url: 'https://github.com/haapp/example-app.git', checkout_ref: 'master' } },
     { vhost: { main_domain: 'ssl.example.com', aliases: ['ssl2.example.com'], ssl: true, docroot: '/websites/example.com/ssl' }},
+    { vhost: { main_domain: 'ssl-only.example.com', ssl: true, redirect_http_to_https: true, docroot: '/websites/example.com/ssl-only' }},
     { vhost: { main_domain: 'ssl-disabled.example.com', ssl: false, docroot: '/websites/example.com/ssl_disabled' }},
     { vhost: { main_domain: 'ssl-without-intermediate-cert.com',              ssl: true, docroot: '/websites/ssl-website-wic.com' }}
   ]

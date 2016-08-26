@@ -18,8 +18,8 @@ describe 'w_apache::deploy' do
 
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
-        node.set['w_apache']['deploy']['enabled'] = true
+        node.normal['w_common']['web_apps'] = web_apps
+        node.normal['w_apache']['deploy']['enabled'] = true
       end.converge(described_recipe)
     end
 
@@ -98,10 +98,10 @@ describe 'w_apache::deploy' do
 
     let(:chef_run) do
       ChefSpec::SoloRunner.new do |node|
-        node.set['w_common']['web_apps'] = web_apps
-        node.set['w_apache']['deploy']['enabled'] = true
-        node.set['w_apache']['deploy']['enable_repo_hostsfile'] = false
-        node.set['w_memcached']['ips'] = ['127.0.0.1']
+        node.normal['w_common']['web_apps'] = web_apps
+        node.normal['w_apache']['deploy']['enabled'] = true
+        node.normal['w_apache']['deploy']['enable_repo_hostsfile'] = false
+        node.normal['w_memcached']['ips'] = ['127.0.0.1']
       end.converge(described_recipe)
     end
 

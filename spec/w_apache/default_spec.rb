@@ -15,9 +15,9 @@ describe 'w_apache::default' do
       context 'with Ubuntu 14.04 trusty' do
         let(:chef_run) do
           ChefSpec::SoloRunner.new do |node|
-            node.set['w_common']['web_apps'] = web_apps
-            node.set['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
-            node.set['php']['version'] = version[:full]
+            node.normal['w_common']['web_apps'] = web_apps
+            node.normal['w_varnish']['node_ipaddress_list'] = ["7.7.7.7", "8.8.8.8"]
+            node.normal['php']['version'] = version[:full]
           end.converge(described_recipe)
         end
 

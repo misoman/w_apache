@@ -1,0 +1,7 @@
+name 'custom_tmpl_cookbook'
+maintainer 'Joel Handwell'
+maintainer_email 'joelhandwell@gmail.com'
+license 'apachev2'
+description 'Installs/Configures apache custom virtual host template'
+long_description 'Installs/Configures apache custom virtual host template'
+version '0.1.0'

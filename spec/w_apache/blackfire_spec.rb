@@ -10,9 +10,9 @@ describe 'w_apache::blackfire' do
 
       let(:chef_run) do
         ChefSpec::SoloRunner.new do |node|
-          node.set['w_common']['web_apps'] = web_apps
-          node.set['w_apache']['blackfire_enabled'] = true
-          node.set['php']['version'] = version[:full]
+          node.normal['w_common']['web_apps'] = web_apps
+          node.normal['w_apache']['blackfire_enabled'] = true
+          node.normal['php']['version'] = version[:full]
         end.converge(described_recipe)
       end
 

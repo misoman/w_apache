@@ -20,5 +20,6 @@ node['w_common']['web_apps'].each do |web_app|
     allow_override 'All'
     directory_index ["index.html", "index.htm", "index.php"]
     log_level vhost.has_key?('log_level') ? vhost['log_level'] : 'error'
+    redirect_http_to_https vhost.has_key?('redirect_http_to_https') ? vhost['redirect_http_to_https'] : false
   end
 end
