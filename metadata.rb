@@ -10,7 +10,6 @@ source_url       'https://github.com/haapp/w_apache'
 
 depends 'apt'
 depends 'build-essential'
-depends 'ubuntu'
 depends 'hostsfile'
 depends 'apache2'
 depends 'php'
