@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'chef', '~> 12.12.15'
+gem 'chef', '12.13.37'
 gem 'chefspec'
 gem 'chef-zero'
 gem 'berkshelf', '~> 4.3.5'
@@ -13,5 +13,5 @@ group :integration do
   gem 'serverspec'
   gem 'kitchen-vagrant'
   gem 'vagrant-wrapper'
-  gem 'test-kitchen', '~> 1.10.2'
+  gem 'test-kitchen', '~> 1.11.1'
 end
