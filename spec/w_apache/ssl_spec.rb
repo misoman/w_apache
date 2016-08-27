@@ -74,12 +74,16 @@ describe 'w_apache::ssl' do
           expect(chef_run).to render_file("/etc/apache2/sites-available/#{domain}-ssl.conf").with_content{ |content|
             expect(content).to match(/ServerName #{domain}/)
             expect(content).to match(/DocumentRoot #{docroot}/)
-            if domain == 'example.com' then
+            if domain == 'ssl.example.com' then
               expect(content).to match(/ServerAlias #{vhost[:aliases].join(' ')}/)
             end
             expect(content).to match(/DirectoryIndex index.html index.htm index.php/)
             expect(content).to match(/AllowOverride All/)
-            expect(content).to match(/LogLevel info/)
+            if domain == 'ssl.example.com' then
+              expect(content).to match(/LogLevel warn/)
+            else
+              expect(content).to match(/LogLevel error/)
+            end
           }          
         end
       end

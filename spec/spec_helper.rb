@@ -38,7 +38,7 @@ def web_apps
     { vhost: { main_domain: 'docroot-only-vhost.com',                              docroot: '/websites/dov'                                }},
     { vhost: { main_domain: 'custom-template-vhost.com',                           docroot: '/websites/ctv',              tpl_cookbook: 'custom_tmpl_cookbook', tpl_source: 'custom_vhost_template.erb' }},
     { vhost: { main_domain: 'docroot-create-disable.com',                          docroot: '/websites/dcd',              create_docroot_dir: false }},
-    { vhost: { main_domain: 'ssl.example.com', aliases: ['ssl2.example.com'],      docroot: '/websites/example.com/ssl',                       ssl: true  }},
+    { vhost: { main_domain: 'ssl.example.com', aliases: ['ssl2.example.com'],      docroot: '/websites/example.com/ssl',  log_level: 'warn',   ssl: true  }},
     { vhost: { main_domain: 'ssl-only.example.com',                                docroot: '/websites/example.com/ssl-only',                  ssl: true    , redirect_http_to_https: true  }},
     { vhost: { main_domain: 'ssl-disabled.example.com',                            docroot: '/websites/example.com/ssl_disabled',              ssl: false }},
     { vhost: { main_domain: 'ssl-without-intermediate-cert.com',                   docroot: '/websites/ssl-website-wic.com',                   ssl: true  }}
