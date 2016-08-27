@@ -28,7 +28,7 @@ describe 'w_apache::vhosts' do
         end
       end
 
-      describe '/etc/apache2/sites-available/example.com.conf' do
+      describe "virtual host config file for #{domain}" do
         it 'is created' do
           expect(chef_run).to create_template("/etc/apache2/sites-available/#{domain}.conf")
         end
@@ -48,6 +48,8 @@ describe 'w_apache::vhosts' do
 
             if domain == 'example2.com' then
               expect(content).to match(/LogLevel info/)
+            elsif domain == 'ssl.example.com' then
+              expect(content).to match(/LogLevel warn/)
             else
               expect(content).to match(/LogLevel error/)
             end

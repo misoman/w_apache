@@ -49,6 +49,7 @@ node['w_common']['web_apps'].each do |web_app|
       ssl_cert_key_file cert_key_file
       allow_override 'All'
       directory_index ["index.html", "index.htm", "index.php"]
+      log_level vhost.has_key?('log_level') ? vhost['log_level'] : 'error'
     end
   end
 end
