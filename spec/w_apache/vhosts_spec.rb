@@ -48,6 +48,8 @@ describe 'w_apache::vhosts' do
 
             if domain == 'example2.com' then
               expect(content).to match(/LogLevel info/)
+            elsif domain == 'ssl.example.com' then
+              expect(content).to match(/LogLevel warn/)
             else
               expect(content).to match(/LogLevel error/)
             end
