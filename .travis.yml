@@ -2,7 +2,22 @@ language: ruby
 bundler_args: --without integration
 rvm:
   - 2.1.8
+env:
+  - RECIPE=blackfire
+  - RECIPE=composer
+  - RECIPE=config_test
+  - RECIPE=default
+  - RECIPE=deploy
+  - RECIPE=haproxydb
+  - RECIPE=monit
+  - RECIPE=newrelic_app
+  - RECIPE=phalcon
+  - RECIPE=php_package
+  - RECIPE=phpmyadmin
+  - RECIPE=ssl
+  - RECIPE=varnish_integration
+  - RECIPE=vhosts
 cache: bundler
 script:
   - bundle exec rake foodcritic
-  - bundle exec rake chefspec
+  - bundle exec rake chefspec:$RECIPE
