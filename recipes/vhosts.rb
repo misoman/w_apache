@@ -4,8 +4,8 @@ node['w_common']['web_apps'].each do |web_app|
 
   directory "document root for #{vhost['main_domain']}" do
     path vhost['docroot']
-    owner 'www-data'
-    group 'www-data'
+    owner node['w_apache']['owner']
+    group node['w_apache']['group']
     recursive true
     not_if { vhost.has_key?('create_docroot_dir') && vhost['create_docroot_dir'] == false }
   end

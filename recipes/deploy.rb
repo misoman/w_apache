@@ -4,44 +4,44 @@ private_key = data_bag_item('w_apache', 'deploykey')['private_key']
 gitlab_pub = data_bag_item('w_apache', 'gitlabkey')['public_key']
 jenkins_pub = data_bag_item('w_apache', 'jenkinskey')['public_key']
 
-execute 'changes shell for www-data' do
-  command 'sudo chsh -s /bin/sh www-data'
+execute 'changes shell for user' do
+  command "sudo chsh -s /bin/sh #{node['w_apache']['owner']}"
 end
 
-directory "/var/www/.ssh" do
-  owner 'www-data'
-  group 'www-data'
+directory "#{node['w_apache']['home']}/.ssh" do
+  owner node['w_apache']['owner']
+  group node['w_apache']['group']
   mode '0700'
   action :create
 end
 
-file '/var/www/.ssh/id_rsa' do
+file "#{node['w_apache']['home']}/.ssh/id_rsa" do
   content private_key
-  owner 'www-data'
-  group 'www-data'
+  owner node['w_apache']['owner']
+  group node['w_apache']['group']
   mode '600'
 end
 
-file '/var/www/.ssh/gitlab_pub' do
+file "#{node['w_apache']['home']}/.ssh/gitlab_pub" do
   content gitlab_pub
-  owner 'www-data'
-  group 'www-data'
+  owner node['w_apache']['owner']
+  group node['w_apache']['group']
 end
 
-file '/var/www/.ssh/jenkins_pub' do
+file "#{node['w_apache']['home']}/.ssh/jenkins_pub" do
   content jenkins_pub
-  owner 'www-data'
-  group 'www-data'
+  owner node['w_apache']['owner']
+  group node['w_apache']['group']
 end
 
-execute 'add and delete gitlab_pub for www-data' do
-  command 'cat /var/www/.ssh/gitlab_pub >> /var/www/.ssh/known_hosts && rm /var/www/.ssh/gitlab_pub'
-  not_if "cat /var/www/.ssh/known_hosts | grep \"#{gitlab_pub}\""
+execute 'add and delete gitlab_pub for user' do
+  command "cat #{node['w_apache']['home']}/.ssh/gitlab_pub >> #{node['w_apache']['home']}/.ssh/known_hosts && rm #{node['w_apache']['home']}/.ssh/gitlab_pub"
+  not_if "cat #{node['w_apache']['home']}/.ssh/known_hosts | grep \"#{gitlab_pub}\""
 end
 
-execute 'add and delete jenkins_pub for www-data' do
-  command 'cat /var/www/.ssh/jenkins_pub >> /var/www/.ssh/authorized_keys && rm /var/www/.ssh/jenkins_pub && chown -R www-data.www-data /var/www/.ssh'
-  not_if "cat /var/www/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
+execute 'add and delete jenkins_pub for user' do
+  command "cat #{node['w_apache']['home']}/.ssh/jenkins_pub >> #{node['w_apache']['home']}/.ssh/authorized_keys && rm #{node['w_apache']['home']}/.ssh/jenkins_pub && chown -R #{node['w_apache']['owner']}.#{node['w_apache']['group']} #{node['w_apache']['home']}/.ssh"
+  not_if "cat #{node['w_apache']['home']}/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
 end
 
 node['w_common']['web_apps'].each do |web_app|
@@ -76,8 +76,8 @@ node['w_common']['web_apps'].each do |web_app|
 
     directory "make sure ownership and existance of #{dir}" do
       path dir
-      owner 'www-data'
-      group 'www-data'
+      owner node['w_apache']['owner']
+      group node['w_apache']['group']
       recursive true
     end
 
@@ -87,8 +87,8 @@ node['w_common']['web_apps'].each do |web_app|
         repository url
         revision repo['checkout_ref']
         enable_checkout false
-        user 'www-data'
-        group 'www-data'
+        user node['w_apache']['owner']
+        group node['w_apache']['group']
         action :checkout
       end
     else
@@ -96,15 +96,15 @@ node['w_common']['web_apps'].each do |web_app|
       execute "git init for #{url}" do
         cwd dir
         command 'git init'
-        user 'www-data'
-        group 'www-data'
+        user node['w_apache']['owner']
+        group node['w_apache']['group']
         creates "#{dir}/.git/HEAD"
       end
 
       execute "git remote add origin #{url}" do
         cwd dir
-        user 'www-data'
-        group 'www-data'
+        user node['w_apache']['owner']
+        group node['w_apache']['group']
         not_if "cat #{dir}/.git/config | grep #{url}"
       end
     end
