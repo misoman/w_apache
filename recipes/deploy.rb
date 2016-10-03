@@ -34,12 +34,12 @@ file "#{node['w_apache']['home']}/.ssh/jenkins_pub" do
   group node['w_apache']['group']
 end
 
-execute 'add and delete gitlab_pub for user' do
+execute "add and delete gitlab_pub for #{node['w_apache']['owner']}" do
   command "cat #{node['w_apache']['home']}/.ssh/gitlab_pub >> #{node['w_apache']['home']}/.ssh/known_hosts && rm #{node['w_apache']['home']}/.ssh/gitlab_pub"
   not_if "cat #{node['w_apache']['home']}/.ssh/known_hosts | grep \"#{gitlab_pub}\""
 end
 
-execute 'add and delete jenkins_pub for user' do
+execute "add and delete jenkins_pub for #{node['w_apache']['owner']}" do
   command "cat #{node['w_apache']['home']}/.ssh/jenkins_pub >> #{node['w_apache']['home']}/.ssh/authorized_keys && rm #{node['w_apache']['home']}/.ssh/jenkins_pub && chown -R #{node['w_apache']['owner']}.#{node['w_apache']['group']} #{node['w_apache']['home']}/.ssh"
   not_if "cat #{node['w_apache']['home']}/.ssh/authorized_keys | grep \"#{jenkins_pub}\""
 end
