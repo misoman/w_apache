@@ -14,8 +14,7 @@ describe 'w_apache::composer' do
     stub_command("php -m | grep 'Phar'").and_return(true)
   end
 
-  it 'creates .cache directory' do
-    #check existed .cache directory with user ownership
+  it 'creates home directory' do
     expect(chef_run).to create_directory('/var/www/composer').with(
       user: 'www-data',
       group: 'www-data',

@@ -1,9 +1,9 @@
 include_recipe 'composer'
 
-directory "make sure ownership and existance of composer home dir #{node['w_apache']['home']}/composer" do
-	path "#{node['w_apache']['home']}/composer"
-	owner node['w_apache']['owner']
-	group node['w_apache']['group']
+directory 'make composer home dir' do
+	path node['composer']['home_dir']
+	owner node['apache']['user']
+	group node['apache']['group']
 	recursive true
-	not_if do ::Dir.exists?("#{node['w_apache']['home']}/composer") end
+	not_if do ::Dir.exists?(node['composer']['home_dir']) end
 end
