@@ -15,7 +15,7 @@ describe 'w_apache::composer' do
   end
 
   it 'creates home directory' do
-    expect(chef_run).to create_directory('/var/www/composer').with(
+    expect(chef_run).to create_directory('/var/www/.composer').with(
       user: 'www-data',
       group: 'www-data',
     )

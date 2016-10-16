@@ -131,7 +131,6 @@ default['xdebug']['directives'] = {
   'remote_host' => '192.168.33.1',
   'remote_port' => '9000'
   }
-default['w_apache']['home'] = '/var/www'
 default['w_apache']['config_test_enabled'] = false
 default['w_apache']['xdebug_enabled'] = false
 default['w_apache']['varnish_enabled'] = true
@@ -143,7 +142,7 @@ default['w_apache']['newrelic']['app_name'] = 'PHP Application'
 default['w_apache']['phalcon_enabled'] = false
 default['w_apache']['blackfire_enabled'] = false
 default['w_apache']['composer_enabled'] = false
-default['composer']['home_dir'] = "#{default['w_apache']['home']}/composer"
+default['composer']['home_dir'] = "/var/www/.composer"
 default['w_apache']['install_mysql_client'] = true
 default['blackfire']['php']['ini_path'] = "/etc/php/#{minor_version}/mods-available/blackfire.ini"
 default['w_apache']['ssl_enabled'] = false
